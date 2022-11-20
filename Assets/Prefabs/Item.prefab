@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6302743585055220007}
   m_Layer: 6
   m_Name: Item
-  m_TagString: Untagged
+  m_TagString: item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -101,10 +101,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tooltipPrefab: {fileID: 2752743668199812008, guid: d57019bb7265d47d2bf3a11d8f5c261a, type: 3}
   rb: {fileID: 6302743585055220007}
-  sprites:
-  - {fileID: -1735769369, guid: 2f97c7f43ddf542bd80cebfd1347fb93, type: 3}
-  - {fileID: 1183249386, guid: 2f97c7f43ddf542bd80cebfd1347fb93, type: 3}
-  - {fileID: -1359267633, guid: 2f97c7f43ddf542bd80cebfd1347fb93, type: 3}
 --- !u!61 &4548674896840623273
 BoxCollider2D:
   m_ObjectHideFlags: 0
