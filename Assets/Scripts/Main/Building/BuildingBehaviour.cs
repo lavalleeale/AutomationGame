@@ -10,4 +10,9 @@ public abstract class BuildingBehaviour : MonoBehaviour
     {
         Active = true;
     }
+
+    public virtual bool Input(ItemStack itemStack, string inputName)
+    {
+        return false;
+    }
 }

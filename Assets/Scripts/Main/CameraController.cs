@@ -6,8 +6,10 @@ public class CameraController : MonoBehaviour
 {
     public float speed = 10;
     public Camera cam;
+    public Grid grid;
+    public WorldGenerationController worldGenController;
+    public GameObject groundPrefab;
 
-    // Update is called once per frame
     void Update()
     {
         cam.orthographicSize = Mathf.Clamp(
@@ -19,5 +21,7 @@ public class CameraController : MonoBehaviour
             x: Input.GetAxis("Horizontal") * Time.deltaTime * speed * cam.orthographicSize,
             y: Input.GetAxis("Vertical") * Time.deltaTime * speed * cam.orthographicSize
         );
+
+        worldGenController.LookAtCell(grid.WorldToCell(transform.position));
     }
 }

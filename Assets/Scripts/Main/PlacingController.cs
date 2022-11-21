@@ -7,7 +7,8 @@ public class PlacingController : MonoBehaviour
     public Grid grid;
     public GameObject minerPrefab,
         conveyorPrefab,
-        furnacePrefab;
+        furnacePrefab,
+        mergerPrefab;
 
     bool isPlacing;
     BuildingBehaviour placing;
@@ -96,6 +97,17 @@ public class PlacingController : MonoBehaviour
             }
             isPlacing = true;
             placing = Instantiate(furnacePrefab).GetComponent<BuildingBehaviour>();
+            placing.transform.rotation = targetPlacementRotation;
+            placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            if (placing != null)
+            {
+                Destroy(placing.gameObject);
+            }
+            isPlacing = true;
+            placing = Instantiate(mergerPrefab).GetComponent<BuildingBehaviour>();
             placing.transform.rotation = targetPlacementRotation;
             placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
         }

@@ -9,7 +9,7 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
     protected abstract int MAX_INPUTS { get; set; }
     protected abstract int MAX_OUTPUTS { get; set; }
     protected abstract string NAME { get; set; }
-    public abstract bool Input(ItemStack itemStack);
+
     public ObservableCollection<ItemStack> Processing;
     public ObservableCollection<ItemStack> Outputs;
     public RecipeScriptableObject currentRecipe;

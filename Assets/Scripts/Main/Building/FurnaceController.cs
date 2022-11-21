@@ -24,7 +24,7 @@ public class FurnaceController : ProcessingBuildingBehaviour
         outputMask = LayerMask.GetMask("items", "buildings");
     }
 
-    public override bool Input(ItemStack itemStack)
+    public override bool Input(ItemStack itemStack, string inputName)
     {
         if (Active)
         {

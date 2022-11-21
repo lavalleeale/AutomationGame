@@ -16,9 +16,10 @@ public class GameManager : MonoBehaviour
         itemPrefab;
 
     // Start is called before the first frame update
-    void Start()
-    {
-        worldGenController.Generate();
+    void Start() {
+
+        // TODO persistence manager
+        worldGenController.Initialize(0);
     }
 
     void Save()
@@ -130,7 +131,10 @@ public class GameManager : MonoBehaviour
 
                     foreach (var input in buildingData.inputs)
                     {
-                        behaviour.Input(new ItemStack(item: input.type.GetItem(), amount: input.amount));
+                        behaviour.Input(
+                            new ItemStack(item: input.type.GetItem(), amount: input.amount),
+                            ""
+                        );
                     }
 
                     behaviour.Outputs = new ObservableCollection<ItemStack>(
@@ -144,15 +148,15 @@ public class GameManager : MonoBehaviour
                     building.GetComponent<BuildingBehaviour>().Activate();
                 }
             }
-            foreach (var itemData in data.items)
-            {
-                var item = Instantiate(itemPrefab);
-                item.transform.position = new Vector3(x: itemData.xPos, y: itemData.yPos);
-                item.GetComponent<ItemController>().itemStack = new ItemStack(
-                    item: itemData.type.GetItem(),
-                    amount: itemData.amount
-                );
-            }
+            //foreach (var itemData in data.items)
+            //{
+            //    var item = Instantiate(itemPrefab);
+            //    item.transform.position = new Vector3(x: itemData.xPos, y: itemData.yPos);
+            //    item.GetComponent<ItemController>().itemStack = new ItemStack(
+            //        item: itemData.type.GetItem(),
+            //        amount: itemData.amount
+            //    );
+            //}
         }
     }
 

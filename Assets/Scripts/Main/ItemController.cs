@@ -6,7 +6,8 @@ public class ItemController : TooltipBehaviour
 {
     public ItemStack itemStack;
     bool blocked;
-    ProcessingBuildingBehaviour waitingForInput;
+    BuildingBehaviour waitingForInput;
+    string waitingForInputName;
     public Rigidbody2D rb;
     Vector3 targetMoveDir;
     LayerMask moveMask;
@@ -29,7 +30,10 @@ public class ItemController : TooltipBehaviour
     //void Update()
     void FixedUpdate()
     {
-        if (waitingForInput != null && waitingForInput.Input(itemStack))
+        if (
+            waitingForInput != null
+            && waitingForInput.Input(itemStack, inputName: waitingForInputName)
+        )
         {
             Destroy(gameObject);
         }
@@ -63,8 +67,8 @@ public class ItemController : TooltipBehaviour
             );
             if (input.collider != null)
             {
-                var building = input.transform.parent.GetComponent<ProcessingBuildingBehaviour>();
-                if (building.Input(itemStack))
+                var building = input.transform.parent.GetComponent<BuildingBehaviour>();
+                if (building.Input(itemStack, input.collider.name))
                 {
                     Destroy(gameObject);
                     return;
@@ -72,6 +76,7 @@ public class ItemController : TooltipBehaviour
                 else
                 {
                     waitingForInput = building;
+                    waitingForInputName = input.collider.name;
                     return;
                 }
             }
