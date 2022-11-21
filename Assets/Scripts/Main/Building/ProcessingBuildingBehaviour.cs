@@ -12,6 +12,7 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
     public abstract bool Input(ItemStack itemStack);
     public ObservableCollection<ItemStack> Processing;
     public ObservableCollection<ItemStack> Outputs;
+    public RecipeScriptableObject currentRecipe;
 
     protected BuildingGUIController GUIController;
     public GameObject buildingGUIPrefab;

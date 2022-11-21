@@ -14,7 +14,6 @@ public class FurnaceController : ProcessingBuildingBehaviour
     public GameObject itemPrefab;
 
     public RecipeScriptableObject[] recipes;
-    RecipeScriptableObject currentRecipe;
     LayerMask outputMask;
 
     // TODO use recipes
@@ -72,7 +71,7 @@ public class FurnaceController : ProcessingBuildingBehaviour
                     if (Outputs[0] == null)
                     {
                         Outputs[0] = new ItemStack(
-                            item: currentRecipe.outputs[0].type.From(),
+                            item: currentRecipe.outputs[0].type.GetItem(),
                             amount: currentRecipe.outputs[0].amount
                         );
                     }

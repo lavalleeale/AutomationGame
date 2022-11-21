@@ -127,14 +127,15 @@ public class GameManager : MonoBehaviour
                 )
                 {
                     behaviour.Activate();
-                    behaviour.Processing = new ObservableCollection<ItemStack>(
-                        buildingData.inputs.Select(
-                            i => new ItemStack(item: i.type.From(), amount: i.amount)
-                        )
-                    );
+
+                    foreach (var input in buildingData.inputs)
+                    {
+                        behaviour.Input(new ItemStack(item: input.type.GetItem(), amount: input.amount));
+                    }
+
                     behaviour.Outputs = new ObservableCollection<ItemStack>(
                         buildingData.outputs.Select(
-                            i => new ItemStack(item: i.type.From(), amount: i.amount)
+                            i => new ItemStack(item: i.type.GetItem(), amount: i.amount)
                         )
                     );
                 }
@@ -148,7 +149,7 @@ public class GameManager : MonoBehaviour
                 var item = Instantiate(itemPrefab);
                 item.transform.position = new Vector3(x: itemData.xPos, y: itemData.yPos);
                 item.GetComponent<ItemController>().itemStack = new ItemStack(
-                    item: itemData.type.From(),
+                    item: itemData.type.GetItem(),
                     amount: itemData.amount
                 );
             }

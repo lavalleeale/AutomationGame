@@ -40,7 +40,7 @@ public class Item
 
 public static class ItemExtensions
 {
-    public static Item From(this Item.Type itemType)
+    public static Item GetItem(this Item.Type itemType)
     {
         switch (itemType)
         {
