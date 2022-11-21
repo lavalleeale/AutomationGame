@@ -20,10 +20,6 @@ jobs:
           key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
             Library-
-      - name: Install Dotnet Tools
-        run: dotnet tool restore
-      - name: Generate MPC
-        run: dotnet mpc -i Assembly-CSharp.csproj -o Assets/Scripts/MessagePackGenerated.cs
 
       # Build
       - name: Build project
