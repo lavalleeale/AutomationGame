@@ -18,11 +18,16 @@ public class ItemController : TooltipBehaviour
         GetComponent<SpriteRenderer>().sprite = itemStack.item.sprite;
         moveMask = LayerMask.GetMask("items", "buildings");
         inputMask = LayerMask.GetMask("input");
-        InitializeTooltip(itemStack.item.name, $"Amount: {Helpers.FormatNumber(itemStack.amount)}", itemStack.item.sprite);
+        InitializeTooltip(
+            itemStack.item.name,
+            $"Amount: {Helpers.FormatNumber(itemStack.amount)}",
+            itemStack.item.sprite
+        );
     }
 
     // Update is called once per frame
-    void Update()
+    //void Update()
+    void FixedUpdate()
     {
         if (waitingForInput != null && waitingForInput.Input(itemStack))
         {
@@ -31,7 +36,12 @@ public class ItemController : TooltipBehaviour
 
         if (blocked)
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position + targetMoveDir * 2, targetMoveDir, 0.05f, moveMask);
+            RaycastHit2D hit = Physics2D.Raycast(
+                transform.position + targetMoveDir * 2,
+                targetMoveDir,
+                0.05f,
+                moveMask
+            );
             if (hit.collider == null)
             {
                 blocked = false;
@@ -45,7 +55,12 @@ public class ItemController : TooltipBehaviour
         if (collision.TryGetComponent(out ConveyorController controller) && controller.Active)
         {
             var dir = controller.pushDir;
-            RaycastHit2D input = Physics2D.Raycast(transform.position + dir * 2, dir, 0.05f, inputMask);
+            RaycastHit2D input = Physics2D.Raycast(
+                transform.position + dir * 2,
+                dir,
+                0.05f,
+                inputMask
+            );
             if (input.collider != null)
             {
                 var building = input.transform.parent.GetComponent<ProcessingBuildingBehaviour>();
@@ -60,7 +75,12 @@ public class ItemController : TooltipBehaviour
                     return;
                 }
             }
-            RaycastHit2D blocker = Physics2D.Raycast(transform.position + dir * 2, dir, 0.05f, moveMask);
+            RaycastHit2D blocker = Physics2D.Raycast(
+                transform.position + dir * 2,
+                dir,
+                0.05f,
+                moveMask
+            );
             if (blocker.collider == null)
             {
                 transform.position += dir;

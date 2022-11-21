@@ -6,7 +6,10 @@ public class BuildingGUIController : MonoBehaviour
 {
     public Canvas canvas;
     public TextMeshProUGUI nameText;
-    public GameObject input, output, slotPrefab, itemPrefab;
+    public GameObject input,
+        output,
+        slotPrefab,
+        itemPrefab;
     public RectTransform processingForeground;
     BuildingBehaviour building;
     Slot[] inputSlots;
@@ -17,7 +20,13 @@ public class BuildingGUIController : MonoBehaviour
         transform.SetParent(GameObject.Find("Canvas").transform, false);
     }
 
-    public void Initialize(string name, int inputCount, int outputCount, bool needsFuel, BuildingBehaviour building)
+    public void Initialize(
+        string name,
+        int inputCount,
+        int outputCount,
+        bool needsFuel,
+        BuildingBehaviour building
+    )
     {
         nameText.text = name;
         inputSlots = new Slot[inputCount];
@@ -42,7 +51,8 @@ public class BuildingGUIController : MonoBehaviour
 
     public enum SlotType
     {
-        input, output
+        input,
+        output
     }
 
     public void SetSlot(SlotType slotType, int slotNum, ItemStack itemStack)
@@ -78,7 +88,10 @@ public class BuildingGUIController : MonoBehaviour
 
     public void UpdateProgress(float amount)
     {
-        processingForeground.offsetMax = new Vector2(-(1 - amount) * 190, processingForeground.offsetMax.y);
+        processingForeground.offsetMax = new Vector2(
+            -(1 - amount) * 190,
+            processingForeground.offsetMax.y
+        );
     }
 
     void Update()
@@ -89,4 +102,3 @@ public class BuildingGUIController : MonoBehaviour
         }
     }
 }
-

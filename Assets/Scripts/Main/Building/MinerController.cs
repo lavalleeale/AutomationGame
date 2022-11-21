@@ -34,7 +34,10 @@ public class MinerController : BuildingBehaviour
                 if (hit.collider == null)
                 {
                     var item = Instantiate(itemPrefab);
-                    item.GetComponent<ItemController>().itemStack = new ItemStack(item: ores[0].drop, amount: 1);
+                    item.GetComponent<ItemController>().itemStack = new ItemStack(
+                        item: ores[0].drop,
+                        amount: 1
+                    );
                     item.transform.position = itemPos;
                 }
             }
@@ -43,7 +46,14 @@ public class MinerController : BuildingBehaviour
 
     public void FindOres()
     {
-        foreach (var ore in Physics2D.OverlapBoxAll(point: transform.position, size: new Vector2(x: 0.32f, y: 0.32f), angle: 0, layerMask: oreMask))
+        foreach (
+            var ore in Physics2D.OverlapBoxAll(
+                point: transform.position,
+                size: new Vector2(x: 0.32f, y: 0.32f),
+                angle: 0,
+                layerMask: oreMask
+            )
+        )
         {
             ores.Add(ore.GetComponent<OreController>());
         }
@@ -53,7 +63,9 @@ public class MinerController : BuildingBehaviour
     {
         base.Activate();
         Invoke(nameof(FindOres), 0);
-        var itemOffset = Quaternion.AngleAxis(transform.localRotation.eulerAngles.z, Vector3.forward) * new Vector3(x: 0, y: -0.64f, z: 0);
+        var itemOffset =
+            Quaternion.AngleAxis(transform.localRotation.eulerAngles.z, Vector3.forward)
+            * new Vector3(x: 0, y: -0.64f, z: 0);
         itemPos = transform.position + itemOffset;
     }
 }

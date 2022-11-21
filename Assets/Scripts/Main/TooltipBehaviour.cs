@@ -6,9 +6,11 @@ using UnityEngine.UI;
 public abstract class TooltipBehaviour : MonoBehaviour
 {
     public GameObject tooltipPrefab;
-    private GameObject canvas, tooltip;
+    private GameObject canvas,
+        tooltip;
     Sprite tooltipSprite;
-    string tooltipName, tooltipInfo;
+    string tooltipName,
+        tooltipInfo;
 
     public void InitializeTooltip(string name, string info, Sprite sprite)
     {
@@ -48,4 +50,3 @@ public abstract class TooltipBehaviour : MonoBehaviour
         Destroy(tooltip);
     }
 }
-

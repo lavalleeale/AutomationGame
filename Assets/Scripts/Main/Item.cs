@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
-using UnityEditor;
-using UnityEditor.UIElements;
-using UnityEngine.UIElements;
 
 public class Item
 {
@@ -31,9 +28,13 @@ public class Item
 
     public static readonly Item COPPER = new("Copper", Type.copper, "ingot_copper");
 
-    public enum Type: byte
+    public enum Type : byte
     {
-        coal, iron_ore, copper_ore, iron, copper
+        coal,
+        iron_ore,
+        copper_ore,
+        iron,
+        copper
     }
 }
 
@@ -64,6 +65,7 @@ public class ItemStack
     public static readonly int MAX_ITEMS = 5;
     public Item item;
     public byte amount;
+
     public ItemStack(Item item, byte amount)
     {
         this.item = item;

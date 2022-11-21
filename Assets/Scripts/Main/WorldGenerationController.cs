@@ -29,7 +29,9 @@ public class WorldGenerationController : MonoBehaviour
                         var controller = ore.GetComponent<OreController>();
                         controller.type = (OreController.Type)i;
                         controller.Strength = (int)(500000000 * (strength - 0.8f) + 10_000);
-                        ore.transform.position = grid.CellToWorld(new Vector3Int(x: c - 50, y: r - 50)) + new Vector3(x: 0.32f, y: 0.32f);
+                        ore.transform.position =
+                            grid.CellToWorld(new Vector3Int(x: c - 50, y: r - 50))
+                            + new Vector3(x: 0.32f, y: 0.32f);
                         ore.transform.parent = ores.transform;
                     }
                 }
@@ -37,4 +39,3 @@ public class WorldGenerationController : MonoBehaviour
         }
     }
 }
-

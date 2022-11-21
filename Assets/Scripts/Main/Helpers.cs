@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class Helpers
 {
-	static public string FormatNumber(int number)
-	{
+    static public string FormatNumber(int number)
+    {
         if (number > 1000000)
             return Mathf.Floor(number / 1000000).ToString() + "M";
         else if (number > 1000)
@@ -13,4 +13,3 @@ public class Helpers
             return number.ToString();
     }
 }
-

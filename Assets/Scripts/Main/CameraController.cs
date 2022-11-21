@@ -10,7 +10,14 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        cam.orthographicSize = Mathf.Clamp(cam.orthographicSize - Input.mouseScrollDelta.y, 1f, 25f);
-        transform.position += new Vector3(x: Input.GetAxis("Horizontal") * Time.deltaTime * speed * cam.orthographicSize, y: Input.GetAxis("Vertical") * Time.deltaTime * speed * cam.orthographicSize);
+        cam.orthographicSize = Mathf.Clamp(
+            cam.orthographicSize - Input.mouseScrollDelta.y,
+            1f,
+            25f
+        );
+        transform.position += new Vector3(
+            x: Input.GetAxis("Horizontal") * Time.deltaTime * speed * cam.orthographicSize,
+            y: Input.GetAxis("Vertical") * Time.deltaTime * speed * cam.orthographicSize
+        );
     }
 }

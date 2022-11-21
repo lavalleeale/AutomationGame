@@ -12,11 +12,13 @@ public class Startup
         if (!serializerRegistered)
         {
             StaticCompositeResolver.Instance.Register(
-                 MessagePack.Resolvers.GeneratedResolver.Instance,
-                 MessagePack.Resolvers.StandardResolver.Instance
+                MessagePack.Resolvers.GeneratedResolver.Instance,
+                MessagePack.Resolvers.StandardResolver.Instance
             );
 
-            var option = MessagePackSerializerOptions.Standard.WithResolver(StaticCompositeResolver.Instance);
+            var option = MessagePackSerializerOptions.Standard.WithResolver(
+                StaticCompositeResolver.Instance
+            );
 
             MessagePackSerializer.DefaultOptions = option;
             serializerRegistered = true;

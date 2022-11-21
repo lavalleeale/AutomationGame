@@ -11,4 +11,3 @@ public abstract class BuildingBehaviour : MonoBehaviour
         Active = true;
     }
 }
-

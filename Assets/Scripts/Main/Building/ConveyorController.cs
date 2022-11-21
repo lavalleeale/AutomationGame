@@ -14,6 +14,8 @@ public class ConveyorController : BuildingBehaviour
     public override void Activate()
     {
         base.Activate();
-        pushDir = Quaternion.AngleAxis(transform.localRotation.eulerAngles.z, Vector3.forward) * new Vector3(x: 0, y: -0.1f, z: 0);
+        pushDir =
+            Quaternion.AngleAxis(transform.localRotation.eulerAngles.z, Vector3.forward)
+            * new Vector3(x: 0, y: -0.1f, z: 0);
     }
 }

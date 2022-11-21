@@ -5,7 +5,9 @@ using UnityEngine;
 public class PlacingController : MonoBehaviour
 {
     public Grid grid;
-    public GameObject minerPrefab, conveyorPrefab, furnacePrefab;
+    public GameObject minerPrefab,
+        conveyorPrefab,
+        furnacePrefab;
 
     bool isPlacing;
     BuildingBehaviour placing;
@@ -29,7 +31,8 @@ public class PlacingController : MonoBehaviour
                 return;
             }
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            placing.transform.position = grid.CellToWorld(grid.WorldToCell(mousePos)) + placing.Size * 0.32f;
+            placing.transform.position =
+                grid.CellToWorld(grid.WorldToCell(mousePos)) + placing.Size * 0.32f;
             if (Input.GetKeyDown(KeyCode.R))
             {
                 placing.transform.Rotate(xAngle: 0, yAngle: 0, zAngle: -90);
@@ -40,10 +43,22 @@ public class PlacingController : MonoBehaviour
                 isPlacing = false;
                 placing.GetComponent<SpriteRenderer>().color = new Color(r: 1, g: 1, b: 1, a: 1);
                 placing.Activate();
-                var items = Physics2D.OverlapBoxAll(point: placing.transform.position, size: placing.Size, angle: 0, layerMask: itemsMask);
+                var items = Physics2D.OverlapBoxAll(
+                    point: placing.transform.position,
+                    size: placing.Size,
+                    angle: 0,
+                    layerMask: itemsMask
+                );
                 if (items != null)
                 {
-                    foreach (var item in Physics2D.OverlapBoxAll(point: placing.transform.position, size: placing.Size, angle: 0, layerMask: itemsMask))
+                    foreach (
+                        var item in Physics2D.OverlapBoxAll(
+                            point: placing.transform.position,
+                            size: placing.Size,
+                            angle: 0,
+                            layerMask: itemsMask
+                        )
+                    )
                     {
                         Destroy(item.gameObject);
                     }

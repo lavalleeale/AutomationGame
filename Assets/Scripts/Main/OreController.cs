@@ -7,10 +7,19 @@ public class OreController : TooltipBehaviour
     public Sprite coalSprite;
     public Sprite copperSprite;
     int strength;
-    public int Strength { get { return strength; } set { UpdateTooltipInfo($"Amount: {Helpers.FormatNumber(value)}"); strength = value; } }
+    public int Strength
+    {
+        get { return strength; }
+        set
+        {
+            UpdateTooltipInfo($"Amount: {Helpers.FormatNumber(value)}");
+            strength = value;
+        }
+    }
 
     public Type type;
     public Item drop;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,7 +34,11 @@ public class OreController : TooltipBehaviour
             case Type.copper:
                 drop = Item.COPPER_ORE;
                 spriteRenderer.sprite = copperSprite;
-                InitializeTooltip("Copper", $"Amount: {Helpers.FormatNumber(strength)}", copperSprite);
+                InitializeTooltip(
+                    "Copper",
+                    $"Amount: {Helpers.FormatNumber(strength)}",
+                    copperSprite
+                );
                 break;
             case Type.iron:
                 drop = Item.IRON_ORE;
@@ -37,6 +50,8 @@ public class OreController : TooltipBehaviour
 
     public enum Type
     {
-        iron, coal, copper
+        iron,
+        coal,
+        copper
     }
 }

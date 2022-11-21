@@ -1,0 +1,5 @@
+*
+!Assets
+Assets/Scripts/MessagePack
+Assets/Scripts/MessagePackGenerated.cs
+Assets/Scripts/MessagePack/

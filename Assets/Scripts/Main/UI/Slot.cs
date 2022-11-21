@@ -20,8 +20,7 @@ public class Slot : MonoBehaviour, IDropHandler
             }
             return null;
         }
-        set
-        { value.transform.SetParent(transform); }
+        set { value.transform.SetParent(transform, false); }
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -32,7 +31,11 @@ public class Slot : MonoBehaviour, IDropHandler
         }
     }
 
-    public void Initialize(BuildingGUIController.SlotType slotType, int slotNum, BuildingGUIController controller)
+    public void Initialize(
+        BuildingGUIController.SlotType slotType,
+        int slotNum,
+        BuildingGUIController controller
+    )
     {
         this.slotType = slotType;
         this.slotNum = slotNum;
