@@ -10,21 +10,25 @@ public class WorldGenerationController : MonoBehaviour
         groundPrefab;
     public Grid buildingGrid,
         chunkGrid;
-    int seed;
+    bool active;
+    public int seed;
 
     public void LookAtCell(Vector3Int cell)
     {
-        for (int r = -5; r <= 5; r++)
+        if (active)
         {
-            for (int c = -5; c <= 5; c++)
+            for (int r = -5; r <= 5; r++)
             {
-                var newCell = cell + new Vector3Int(x: c, y: r);
-                if (!loadedChunks.Contains(newCell))
+                for (int c = -5; c <= 5; c++)
                 {
-                    var ground = Instantiate(groundPrefab);
-                    ground.transform.position = chunkGrid.CellToWorld(newCell);
-                    Generate(newCell);
-                    loadedChunks.Add(newCell);
+                    var newCell = cell + new Vector3Int(x: c, y: r);
+                    if (!loadedChunks.Contains(newCell))
+                    {
+                        var ground = Instantiate(groundPrefab);
+                        ground.transform.position = chunkGrid.CellToWorld(newCell);
+                        Generate(newCell);
+                        loadedChunks.Add(newCell);
+                    }
                 }
             }
         }
@@ -32,7 +36,13 @@ public class WorldGenerationController : MonoBehaviour
 
     public void Initialize(int seed)
     {
+        this.active = true;
         this.seed = seed;
+        for (int i = 0; i < loadedChunks.Count; i++)
+        {
+            var ground = Instantiate(groundPrefab);
+            ground.transform.position = chunkGrid.CellToWorld(loadedChunks[i]);
+        }
     }
 
     public void Generate(Vector3Int gridPos)
@@ -49,9 +59,10 @@ public class WorldGenerationController : MonoBehaviour
                 for (int i = 0; i < 3; i++)
                 {
                     var strength = Mathf.PerlinNoise(
-                        c / 32f + centeredOn.x + 1000000,
-                        r / 32f + centeredOn.y + seed + 1000000 * (i + 1)
+                        c / 32f + centeredOn.x + 1000000 + seed,
+                        r / 32f + centeredOn.y + 1000000 + seed+ 1000000 * i
                     );
+
                     if (strength > 0.9f)
                     {
                         var ore = Instantiate(orePrefab);

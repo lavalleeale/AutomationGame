@@ -38,6 +38,7 @@ public class MinerController : BuildingBehaviour
                         item: ores[0].drop,
                         amount: 1
                     );
+                    ores[0].Strength--;
                     item.transform.position = itemPos;
                 }
             }
