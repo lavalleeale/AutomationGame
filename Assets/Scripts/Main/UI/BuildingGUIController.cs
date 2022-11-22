@@ -13,7 +13,7 @@ public class BuildingGUIController : MonoBehaviour
     public RectTransform processingForeground;
     BuildingBehaviour building;
     Slot[] inputSlots;
-    Slot[] outputSlots;
+    Slot outputSlot;
 
     void Start()
     {
@@ -23,7 +23,6 @@ public class BuildingGUIController : MonoBehaviour
     public void Initialize(
         string name,
         int inputCount,
-        int outputCount,
         bool needsFuel,
         BuildingBehaviour building
     )
@@ -37,14 +36,11 @@ public class BuildingGUIController : MonoBehaviour
             inputSlots[i] = slot.GetComponent<Slot>();
             inputSlots[i].Initialize(SlotType.input, i, this);
         }
-        outputSlots = new Slot[outputCount];
-        for (int i = 0; i < outputCount; i++)
-        {
-            var slot = Instantiate(slotPrefab);
-            slot.transform.SetParent(output.transform);
-            outputSlots[i] = slot.GetComponent<Slot>();
-            outputSlots[i].Initialize(SlotType.output, i, this);
-        }
+
+        var outputSlot = Instantiate(slotPrefab);
+        outputSlot.transform.SetParent(output.transform);
+        this.outputSlot = outputSlot.GetComponent<Slot>();
+        this.outputSlot.Initialize(SlotType.output, 0, this);
         // TODO fuel
         this.building = building;
     }
@@ -72,16 +68,16 @@ public class BuildingGUIController : MonoBehaviour
         }
         else
         {
-            if (outputSlots[slotNum].Child)
+            if (outputSlot.Child)
             {
-                Destroy(outputSlots[slotNum].Child);
+                Destroy(outputSlot.Child);
             }
 
             if (itemStack != null)
             {
                 var item = Instantiate(itemPrefab);
                 item.GetComponent<UIItem>().itemStack = itemStack;
-                outputSlots[slotNum].Child = item;
+                outputSlot.Child = item;
             }
         }
     }

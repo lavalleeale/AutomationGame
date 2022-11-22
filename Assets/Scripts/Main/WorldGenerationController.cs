@@ -60,7 +60,7 @@ public class WorldGenerationController : MonoBehaviour
                 {
                     var strength = Mathf.PerlinNoise(
                         c / 32f + centeredOn.x + 1000000 + seed,
-                        r / 32f + centeredOn.y + 1000000 + seed+ 1000000 * i
+                        r / 32f + centeredOn.y + 1000000 + seed + 1000000 * i
                     );
 
                     if (strength > 0.9f)

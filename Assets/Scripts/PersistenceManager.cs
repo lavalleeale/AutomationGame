@@ -114,9 +114,6 @@ public class PersistenceManager : MonoBehaviour
             var inputs = controller.Processing
                 .Select(i => new SavedItemStack(type: i.item.type, amount: i.amount))
                 .ToArray<SavedItemStack>();
-            var outputs = controller.Outputs
-                .Select(i => new SavedItemStack(type: i.item.type, amount: i.amount))
-                .ToArray<SavedItemStack>();
             data.buildings[i] = new SavedBuilding(
                 type: SavedBuilding.Type.furnace,
                 rotation: (byte)(furnaces[i].transform.rotation.eulerAngles.z / 90),
@@ -124,7 +121,7 @@ public class PersistenceManager : MonoBehaviour
                     furnaces[i].transform.position
                 ),
                 inputs: inputs,
-                outputs: outputs
+                output: new SavedItemStack(type: controller.Output.item.type, amount: controller.Output.amount)
             );
         }
 
@@ -135,7 +132,7 @@ public class PersistenceManager : MonoBehaviour
                 rotation: (byte)(miners[i].transform.rotation.eulerAngles.z / 90),
                 position: worldGenController.buildingGrid.WorldToCell(miners[i].transform.position),
                 inputs: null,
-                outputs: null
+                output: null
             );
         }
 
@@ -148,7 +145,7 @@ public class PersistenceManager : MonoBehaviour
                     conveyors[i].transform.position
                 ),
                 inputs: null,
-                outputs: null
+                output: null
             );
         }
 
@@ -227,11 +224,7 @@ public class PersistenceManager : MonoBehaviour
                     );
                 }
 
-                behaviour.Outputs = new ObservableCollection<ItemStack>(
-                    buildingData.outputs.Select(
-                        i => new ItemStack(item: i.type.GetItem(), amount: i.amount)
-                    )
-                );
+                behaviour.Output = new ItemStack(item: buildingData.output.type.GetItem(), amount: buildingData.output.amount);
             }
             else
             {
@@ -359,14 +352,14 @@ public class SavedBuilding
     public SavedItemStack[] inputs;
 
     [Key(5)]
-    public SavedItemStack[] outputs;
+    public SavedItemStack output;
 
     public SavedBuilding(
         Type type,
         byte rotation,
         Vector3Int position,
         SavedItemStack[] inputs,
-        SavedItemStack[] outputs
+        SavedItemStack output
     )
     {
         this.type = type;
@@ -374,17 +367,16 @@ public class SavedBuilding
         this.xPos = position.x;
         this.yPos = position.y;
         this.inputs = inputs;
-        this.outputs = outputs;
+        this.output = output;
     }
 
-    [SerializationConstructor]
     public SavedBuilding(
         Type type,
         byte rotation,
         int xPos,
         int yPos,
         SavedItemStack[] inputs,
-        SavedItemStack[] outputs
+        SavedItemStack output
     )
     {
         this.type = type;
@@ -392,7 +384,7 @@ public class SavedBuilding
         this.xPos = xPos;
         this.yPos = yPos;
         this.inputs = inputs;
-        this.outputs = outputs;
+        this.output = output;
     }
 
     public enum Type : byte

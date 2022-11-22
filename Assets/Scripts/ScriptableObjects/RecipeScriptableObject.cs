@@ -6,7 +6,7 @@ using UnityEngine;
 public class RecipeScriptableObject : ScriptableObject
 {
     public RecipeItem[] inputs;
-    public RecipeItem[] outputs;
+    public RecipeItem output;
     public float processingTime;
 
     [System.Serializable]
