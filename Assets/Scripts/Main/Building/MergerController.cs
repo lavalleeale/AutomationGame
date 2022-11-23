@@ -3,6 +3,8 @@ using System.Collections;
 
 public class MergerController : BuildingBehaviour
 {
+    public override Vector3 Size { get; } = new Vector2(1, 1);
+
     Vector3 itemPos;
     ItemStack top,
         left,
@@ -14,7 +16,6 @@ public class MergerController : BuildingBehaviour
 
     void Start()
     {
-        Size = new Vector2(1, 1);
         spawnMask = LayerMask.GetMask("items", "buildings");
     }
 

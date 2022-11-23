@@ -48,12 +48,12 @@ public class BuildingGUIController : MonoBehaviour
             var recipeView = Instantiate(recipePrefab);
             recipeView.GetComponent<Recipe>().Initialize(recipes[i], this);
             recipeView.transform.SetParent(recipeContent.transform, false);
-            recipeView.transform.position -= new Vector3(x: 0, y: i * 20);
+            recipeView.transform.position -= new Vector3(x: 0, y: i * 30);
         }
         var recipeContentTransform = recipeContent.GetComponent<RectTransform>();
         recipeContentTransform.sizeDelta = new Vector2(
             recipeContentTransform.sizeDelta.x,
-            20 * recipes.Length
+            30 * recipes.Length
         );
         // TODO fuel
         this.building = building;
@@ -113,6 +113,7 @@ public class BuildingGUIController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            GameManager.inGUI = false;
             Destroy(gameObject);
         }
     }

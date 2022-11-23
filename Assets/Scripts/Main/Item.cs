@@ -32,7 +32,8 @@ public class Item
 
     public static readonly Item IRON_CABlE = new("Iron Cable", Type.iron_cable, "iron_cable");
 
-    public static readonly Item COPPER_PLATE = new("Copper Plate", Type.copper_plate, "copper_plate");
+    public static readonly Item COPPER_PLATE =
+        new("Copper Plate", Type.copper_plate, "copper_plate");
 
     public static readonly Item COPPER_WIRE = new("Copper Wire", Type.copper_wire, "copper_wire");
 

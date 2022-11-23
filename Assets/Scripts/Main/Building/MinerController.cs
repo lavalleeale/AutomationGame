@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class MinerController : BuildingBehaviour
 {
+    public override Vector3 Size { get; } = new Vector2(1, 1);
     public GameObject itemPrefab;
     List<OreController> ores = new();
     float generationSpeed = 0.5f;
@@ -17,7 +18,6 @@ public class MinerController : BuildingBehaviour
 
     void Start()
     {
-        Size = new Vector2(1, 1);
         spawnMask = LayerMask.GetMask("items", "buildings");
         oreMask = LayerMask.GetMask("ores");
     }

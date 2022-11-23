@@ -7,10 +7,10 @@ public class ConstructorController : ProcessingBuildingBehaviour
 {
     protected override int MAX_INPUTS { get; set; } = 1;
     protected override string NAME { get; set; } = "Constructor";
+    public override Vector3 Size { get; } = new Vector2(2, 2);
 
     void Start()
     {
-        Size = new Vector2(2, 2);
         outputMask = LayerMask.GetMask("items", "buildings");
     }
 

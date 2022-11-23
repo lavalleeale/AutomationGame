@@ -4,7 +4,7 @@ using UnityEngine;
 public abstract class BuildingBehaviour : MonoBehaviour
 {
     public bool Active { private set; get; }
-    public Vector3 Size { protected set; get; }
+    public abstract Vector3 Size { get; }
 
     public virtual void Activate()
     {

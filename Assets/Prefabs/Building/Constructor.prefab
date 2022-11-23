@@ -185,9 +185,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recipes:
   - {fileID: 11400000, guid: f3143d38ced9b4fa2baf5bfd117e2a1e, type: 2}
+  - {fileID: 11400000, guid: 94e7e33de1850455eb4ca22b02c2822f, type: 2}
   - {fileID: 11400000, guid: 5e481e7f63c58495eb8349f4a14a0d35, type: 2}
   - {fileID: 11400000, guid: fe512cacc5494492299c6896873aca2c, type: 2}
-  - {fileID: 11400000, guid: 94e7e33de1850455eb4ca22b02c2822f, type: 2}
   currentRecipe: {fileID: 0}
   itemPrefab: {fileID: 5652196610731178629, guid: 8306a53ed20e14c9f9cdb689da7082d0, type: 3}
   buildingGUIPrefab: {fileID: 4820162196849005239, guid: f2c889a93bd1e4c3baf1c78f07885cc1, type: 3}

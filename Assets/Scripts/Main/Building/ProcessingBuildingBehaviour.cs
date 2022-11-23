@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System;
 using System.Collections.Specialized;
 using System.Linq;
+using UnityEngine.EventSystems;
 
 public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
 {
@@ -17,11 +18,18 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
         get { return output; }
         set
         {
+            if (value.amount == 0)
+            {
+                output = null;
+            }
+            else
+            {
+                output = value;
+            }
             if (GUIController != null)
             {
-                GUIController.SetSlot(BuildingGUIController.SlotType.output, 0, value);
+                GUIController.SetSlot(BuildingGUIController.SlotType.output, 0, output);
             }
-            output = value;
         }
     }
 
@@ -47,13 +55,9 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
             // If item already in Processing add to item count and return true
             for (int i = 0; i < Processing.Count; i++)
             {
-                if (
-                    Processing[i]?.item.type == itemStack.item.type
-                )
+                if (Processing[i]?.item.type == itemStack.item.type)
                 {
-                    if (
-                itemStack.amount + Processing[i].amount <= ItemStack.MAX_ITEMS
-                                )
+                    if (itemStack.amount + Processing[i].amount <= ItemStack.MAX_ITEMS)
                     {
                         Processing[i] = new ItemStack(
                             item: Processing[i].item,
@@ -81,7 +85,6 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
                     }
                 }
             }
-
         }
         return false;
     }
@@ -94,7 +97,10 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
             {
                 for (int i = 0; i < currentRecipe.inputs.Length; i++)
                 {
-                    if (Processing[i] == null || Processing[i].amount < currentRecipe.inputs[i].amount)
+                    if (
+                        Processing[i] == null
+                        || Processing[i].amount < currentRecipe.inputs[i].amount
+                    )
                     {
                         return;
                     }
@@ -140,7 +146,7 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
                         Processing[i] = new ItemStack(
                             item: Processing[i].item,
                             amount: (byte)(Processing[i].amount - currentRecipe.inputs[i].amount)
-                       );
+                        );
                     }
                     OutputItem();
                 }
@@ -216,8 +222,9 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
 
     private void OnMouseDown()
     {
-        if (Active && GUIController == null)
+        if (Active && GUIController == null && !GameManager.inGUI)
         {
+            GameManager.inGUI = true;
             var buildGUI = Instantiate(buildingGUIPrefab);
             GUIController = buildGUI.GetComponent<BuildingGUIController>();
             GUIController.Initialize(NAME, MAX_INPUTS, true, this, recipes);

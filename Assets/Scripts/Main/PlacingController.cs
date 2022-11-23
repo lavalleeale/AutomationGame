@@ -11,23 +11,31 @@ public class PlacingController : MonoBehaviour
         mergerPrefab,
         constructorPrefab;
 
-    bool isPlacing;
     BuildingBehaviour placing;
     Quaternion targetPlacementRotation = Quaternion.identity;
     LayerMask itemsMask;
+    LayerMask buildingsMask;
 
     void Start()
     {
         itemsMask = LayerMask.GetMask("items");
+        buildingsMask = LayerMask.GetMask("buildings", "conveyors");
     }
 
     void Update()
     {
-        if (isPlacing)
+        if (GameManager.inGUI)
+        {
+            if (placing != null)
+            {
+                Destroy(placing);
+            }
+            return;
+        }
+        if (placing != null)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                isPlacing = false;
                 Destroy(placing.gameObject);
                 placing = null;
                 return;
@@ -42,12 +50,20 @@ public class PlacingController : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                isPlacing = false;
+                if (Physics2D.OverlapBoxAll(
+                    point: placing.transform.position,
+                    size: placing.Size * 0.32f,
+                    angle: 0,
+                    layerMask: buildingsMask
+                ).Length != 1)
+                {
+                    return;
+                }
                 placing.GetComponent<SpriteRenderer>().color = new Color(r: 1, g: 1, b: 1, a: 1);
                 placing.Activate();
                 var items = Physics2D.OverlapBoxAll(
                     point: placing.transform.position,
-                    size: placing.Size,
+                    size: placing.Size * 0.32f,
                     angle: 0,
                     layerMask: itemsMask
                 );
@@ -74,7 +90,7 @@ public class PlacingController : MonoBehaviour
             {
                 Destroy(placing.gameObject);
             }
-            isPlacing = true;
+
             placing = Instantiate(minerPrefab).GetComponent<BuildingBehaviour>();
             placing.transform.rotation = targetPlacementRotation;
             placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
@@ -85,7 +101,7 @@ public class PlacingController : MonoBehaviour
             {
                 Destroy(placing.gameObject);
             }
-            isPlacing = true;
+
             placing = Instantiate(conveyorPrefab).GetComponent<BuildingBehaviour>();
             placing.transform.rotation = targetPlacementRotation;
             placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
@@ -96,7 +112,7 @@ public class PlacingController : MonoBehaviour
             {
                 Destroy(placing.gameObject);
             }
-            isPlacing = true;
+
             placing = Instantiate(furnacePrefab).GetComponent<BuildingBehaviour>();
             placing.transform.rotation = targetPlacementRotation;
             placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
@@ -107,7 +123,7 @@ public class PlacingController : MonoBehaviour
             {
                 Destroy(placing.gameObject);
             }
-            isPlacing = true;
+
             placing = Instantiate(mergerPrefab).GetComponent<BuildingBehaviour>();
             placing.transform.rotation = targetPlacementRotation;
             placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
@@ -118,7 +134,7 @@ public class PlacingController : MonoBehaviour
             {
                 Destroy(placing.gameObject);
             }
-            isPlacing = true;
+
             placing = Instantiate(constructorPrefab).GetComponent<BuildingBehaviour>();
             placing.transform.rotation = targetPlacementRotation;
             placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);

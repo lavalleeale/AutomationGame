@@ -691,6 +691,7 @@ GameObject:
   - component: {fileID: 2017057765948261012}
   - component: {fileID: 717958829366771299}
   - component: {fileID: 3867119960055999007}
+  - component: {fileID: 7972065484812782992}
   m_Layer: 0
   m_Name: Building
   m_TagString: Untagged
@@ -749,6 +750,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4820162196849005239}
   m_CullTransparentMesh: 1
+--- !u!225 &7972065484812782992
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4820162196849005239}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &4919260128062373535
 GameObject:
   m_ObjectHideFlags: 0
@@ -870,7 +883,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3975554722318364239}
   m_HandleRect: {fileID: 7757457535498027893}
   m_Direction: 2
-  m_Value: 0.99999976
+  m_Value: 1
   m_Size: 0.6
   m_NumberOfSteps: 0
   m_OnValueChanged:

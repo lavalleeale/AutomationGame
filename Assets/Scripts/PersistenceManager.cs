@@ -10,6 +10,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using System.Text.RegularExpressions;
+using UnityEngine.EventSystems;
 
 public class PersistenceManager : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class PersistenceManager : MonoBehaviour
     public GameObject minerPrefab,
         conveyorPrefab,
         furnacePrefab,
+        constructorPrefab,
         itemPrefab,
         orePrefab,
         loadPrefab;
@@ -93,13 +95,15 @@ public class PersistenceManager : MonoBehaviour
     void Save()
     {
         var furnaces = GameObject.FindGameObjectsWithTag("furnace");
+        var constructors = GameObject.FindGameObjectsWithTag("constructor");
         var miners = GameObject.FindGameObjectsWithTag("miner");
         var conveyors = GameObject.FindGameObjectsWithTag("conveyor");
         var items = GameObject.FindGameObjectsWithTag("item");
         var ores = GameObject.FindGameObjectsWithTag("ore");
 
         var data = new SaveData(
-            buildings: new SavedBuilding[furnaces.Length + miners.Length + conveyors.Length],
+            buildings: new SavedBuilding[miners.Length + conveyors.Length],
+            processingBuildings: new SavedProcessingBuilding[furnaces.Length + constructors.Length],
             items: new SavedWorldItemStack[items.Length],
             chunks: worldGenController.loadedChunks
                 .Select(i => new LoadedChunk(x: i.x, y: i.y))
@@ -112,43 +116,77 @@ public class PersistenceManager : MonoBehaviour
         {
             var controller = furnaces[i].GetComponent<FurnaceController>();
             var inputs = controller.Processing
-                .Select(i => new SavedItemStack(type: i.item.type, amount: i.amount))
+                .Select(
+                    i => i == null ? null : new SavedItemStack(type: i.item.type, amount: i.amount)
+                )
                 .ToArray<SavedItemStack>();
-            data.buildings[i] = new SavedBuilding(
-                type: SavedBuilding.Type.furnace,
+            data.processingBuildings[i] = new SavedProcessingBuilding(
+                type: SavedProcessingBuilding.Type.furnace,
                 rotation: (byte)(furnaces[i].transform.rotation.eulerAngles.z / 90),
                 position: worldGenController.buildingGrid.WorldToCell(
-                    furnaces[i].transform.position
+                    furnaces[i].transform.position - controller.Size * 0.32f
+                ),
+                inputs: inputs,
+                output: controller.Output == null
+                    ? null
+                    : new SavedItemStack(
+                        type: controller.Output.item.type,
+                        amount: controller.Output.amount
+                    ),
+                currentRecipe: Array.FindIndex(
+                    controller.recipes,
+                    (recpie) => recpie == controller.currentRecipe
+                )
+            );
+        }
+
+        for (int i = 0; i < constructors.Length; i++)
+        {
+            var controller = constructors[i].GetComponent<ConstructorController>();
+            var inputs = controller.Processing
+                .Select(
+                    i => i == null ? null : new SavedItemStack(type: i.item.type, amount: i.amount)
+                )
+                .ToArray<SavedItemStack>();
+            data.processingBuildings[i + furnaces.Length] = new SavedProcessingBuilding(
+                type: SavedProcessingBuilding.Type.constructor,
+                rotation: (byte)(constructors[i].transform.rotation.eulerAngles.z / 90),
+                position: worldGenController.buildingGrid.WorldToCell(
+                    constructors[i].transform.position - controller.Size * 0.32f
                 ),
                 inputs: inputs,
                 output: new SavedItemStack(
                     type: controller.Output.item.type,
                     amount: controller.Output.amount
+                ),
+                currentRecipe: Array.FindIndex(
+                    controller.recipes,
+                    (recpie) => recpie == controller.currentRecipe
                 )
             );
         }
 
         for (int i = 0; i < miners.Length; i++)
         {
-            data.buildings[i + furnaces.Length] = new SavedBuilding(
+            var controller = miners[i].GetComponent<MinerController>();
+            data.buildings[i] = new SavedBuilding(
                 type: SavedBuilding.Type.miner,
                 rotation: (byte)(miners[i].transform.rotation.eulerAngles.z / 90),
-                position: worldGenController.buildingGrid.WorldToCell(miners[i].transform.position),
-                inputs: null,
-                output: null
+                position: worldGenController.buildingGrid.WorldToCell(
+                    miners[i].transform.position - controller.Size * 0.32f
+                )
             );
         }
 
         for (int i = 0; i < conveyors.Length; i++)
         {
-            data.buildings[i + furnaces.Length + miners.Length] = new SavedBuilding(
+            var controller = conveyors[i].GetComponent<ConveyorController>();
+            data.buildings[i + miners.Length] = new SavedBuilding(
                 type: SavedBuilding.Type.conveyor,
                 rotation: (byte)(conveyors[i].transform.rotation.eulerAngles.z / 90),
                 position: worldGenController.buildingGrid.WorldToCell(
-                    conveyors[i].transform.position
-                ),
-                inputs: null,
-                output: null
+                    conveyors[i].transform.position - controller.Size * 0.32f
+                )
             );
         }
 
@@ -158,7 +196,9 @@ public class PersistenceManager : MonoBehaviour
             data.items[i] = new SavedWorldItemStack(
                 amount: itemStack.amount,
                 type: itemStack.item.type,
-                position: worldGenController.buildingGrid.WorldToCell(items[i].transform.position)
+                position: worldGenController.buildingGrid.WorldToCell(
+                    items[i].transform.position - Vector3.one * 0.32f
+                )
             );
         }
 
@@ -166,7 +206,9 @@ public class PersistenceManager : MonoBehaviour
         {
             var ore = ores[i].GetComponent<OreController>();
             data.ores[i] = new SavedOre(
-                pos: worldGenController.buildingGrid.WorldToCell(ore.transform.position),
+                pos: worldGenController.buildingGrid.WorldToCell(
+                    ore.transform.position - Vector3.one * 0.32f
+                ),
                 capacity: ore.Strength
             );
         }
@@ -194,10 +236,6 @@ public class PersistenceManager : MonoBehaviour
             GameObject building;
             switch (buildingData.type)
             {
-                case SavedBuilding.Type.furnace:
-                    building = Instantiate(furnacePrefab);
-                    var controller = building.GetComponent<FurnaceController>();
-                    break;
                 case SavedBuilding.Type.miner:
                     building = Instantiate(minerPrefab);
                     break;
@@ -207,40 +245,82 @@ public class PersistenceManager : MonoBehaviour
                 default:
                     throw new System.NotImplementedException("unknown building");
             }
-            building.transform.position = new Vector3(x: buildingData.xPos, y: buildingData.yPos);
+
+            var behaviour = building.GetComponent<BuildingBehaviour>();
+            building.transform.position =
+                worldGenController.buildingGrid.CellToWorld(
+                    new Vector3Int(x: buildingData.xPos, y: buildingData.yPos)
+                )
+                + behaviour.Size * 0.32f;
 
             building.transform.Rotate(xAngle: 0, yAngle: 0, zAngle: buildingData.rotation * 90);
 
-            if (
-                building.TryGetComponent<ProcessingBuildingBehaviour>(
-                    out ProcessingBuildingBehaviour behaviour
-                )
-            )
-            {
-                behaviour.Activate();
+            behaviour.Activate();
+        }
 
-                foreach (var input in buildingData.inputs)
+        foreach (var processingBuildingData in data.processingBuildings)
+        {
+            GameObject building;
+            switch (processingBuildingData.type)
+            {
+                case SavedProcessingBuilding.Type.furnace:
+                    building = Instantiate(furnacePrefab);
+                    var controller = building.GetComponent<FurnaceController>();
+                    break;
+                case SavedProcessingBuilding.Type.constructor:
+                    building = Instantiate(constructorPrefab);
+                    break;
+                default:
+                    throw new System.NotImplementedException("unknown building");
+            }
+
+            var behaviour = building.GetComponent<ProcessingBuildingBehaviour>();
+
+            building.transform.position =
+                worldGenController.buildingGrid.CellToWorld(
+                    new Vector3Int(x: processingBuildingData.xPos, y: processingBuildingData.yPos)
+                )
+                + behaviour.Size * 0.32f;
+
+            building.transform.Rotate(
+                xAngle: 0,
+                yAngle: 0,
+                zAngle: processingBuildingData.rotation * 90
+            );
+
+            behaviour.Activate();
+
+            behaviour.currentRecipe =
+                processingBuildingData.currentRecipe == -1
+                    ? null
+                    : behaviour.recipes[processingBuildingData.currentRecipe];
+
+            foreach (var input in processingBuildingData.inputs)
+            {
+                if (input != null)
                 {
                     behaviour.Input(
                         new ItemStack(item: input.type.GetItem(), amount: input.amount),
                         ""
                     );
                 }
+            }
 
+            if (processingBuildingData.output != null)
                 behaviour.Output = new ItemStack(
-                    item: buildingData.output.type.GetItem(),
-                    amount: buildingData.output.amount
+                    item: processingBuildingData.output.type.GetItem(),
+                    amount: processingBuildingData.output.amount
                 );
-            }
-            else
-            {
-                building.GetComponent<BuildingBehaviour>().Activate();
-            }
         }
+
         foreach (var itemData in data.items)
         {
             var item = Instantiate(itemPrefab);
-            item.transform.position = new Vector3(x: itemData.xPos, y: itemData.yPos);
+            item.transform.position =
+                worldGenController.buildingGrid.CellToWorld(
+                    new Vector3Int(x: itemData.xPos, y: itemData.yPos)
+                )
+                + Vector3.one * 0.32f;
             item.GetComponent<ItemController>().itemStack = new ItemStack(
                 item: itemData.type.GetItem(),
                 amount: itemData.amount
@@ -250,7 +330,11 @@ public class PersistenceManager : MonoBehaviour
         foreach (var oreData in data.ores)
         {
             var ore = Instantiate(orePrefab);
-            ore.transform.position = new Vector3(x: oreData.x, y: oreData.y);
+            ore.transform.position =
+                worldGenController.buildingGrid.CellToWorld(
+                    new Vector3Int(x: oreData.x, y: oreData.y)
+                )
+                + Vector3.one * 0.32f;
             ore.GetComponent<OreController>().Strength = oreData.capacity;
         }
 
@@ -269,19 +353,23 @@ public class SaveData
     public SavedBuilding[] buildings;
 
     [Key(1)]
-    public SavedWorldItemStack[] items;
+    public SavedProcessingBuilding[] processingBuildings;
 
     [Key(2)]
-    public LoadedChunk[] chunks;
+    public SavedWorldItemStack[] items;
 
     [Key(3)]
-    public SavedOre[] ores;
+    public LoadedChunk[] chunks;
 
     [Key(4)]
+    public SavedOre[] ores;
+
+    [Key(5)]
     public int seed;
 
     public SaveData(
         SavedBuilding[] buildings,
+        SavedProcessingBuilding[] processingBuildings,
         SavedWorldItemStack[] items,
         LoadedChunk[] chunks,
         SavedOre[] ores,
@@ -289,6 +377,7 @@ public class SaveData
     )
     {
         this.buildings = buildings;
+        this.processingBuildings = processingBuildings;
         this.items = items;
         this.chunks = chunks;
         this.ores = ores;
@@ -340,7 +429,7 @@ public class LoadedChunk
 }
 
 [MessagePackObject]
-public class SavedBuilding
+public class SavedProcessingBuilding
 {
     [Key(0)]
     public Type type;
@@ -360,12 +449,16 @@ public class SavedBuilding
     [Key(5)]
     public SavedItemStack output;
 
-    public SavedBuilding(
+    [Key(6)]
+    public int currentRecipe;
+
+    public SavedProcessingBuilding(
         Type type,
         byte rotation,
         Vector3Int position,
         SavedItemStack[] inputs,
-        SavedItemStack output
+        SavedItemStack output,
+        int currentRecipe
     )
     {
         this.type = type;
@@ -374,15 +467,17 @@ public class SavedBuilding
         this.yPos = position.y;
         this.inputs = inputs;
         this.output = output;
+        this.currentRecipe = currentRecipe;
     }
 
-    public SavedBuilding(
+    public SavedProcessingBuilding(
         Type type,
         byte rotation,
         int xPos,
         int yPos,
         SavedItemStack[] inputs,
-        SavedItemStack output
+        SavedItemStack output,
+        int currentRecipe
     )
     {
         this.type = type;
@@ -391,6 +486,45 @@ public class SavedBuilding
         this.yPos = yPos;
         this.inputs = inputs;
         this.output = output;
+        this.currentRecipe = currentRecipe;
+    }
+
+    public enum Type : byte
+    {
+        furnace,
+        constructor
+    }
+}
+
+[MessagePackObject]
+public class SavedBuilding
+{
+    [Key(0)]
+    public Type type;
+
+    [Key(1)]
+    public byte rotation;
+
+    [Key(2)]
+    public int xPos;
+
+    [Key(3)]
+    public int yPos;
+
+    public SavedBuilding(Type type, byte rotation, Vector3Int position)
+    {
+        this.type = type;
+        this.rotation = rotation;
+        this.xPos = position.x;
+        this.yPos = position.y;
+    }
+
+    public SavedBuilding(Type type, byte rotation, int xPos, int yPos)
+    {
+        this.type = type;
+        this.rotation = rotation;
+        this.xPos = xPos;
+        this.yPos = yPos;
     }
 
     public enum Type : byte

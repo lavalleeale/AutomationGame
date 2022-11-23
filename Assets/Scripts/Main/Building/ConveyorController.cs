@@ -5,11 +5,7 @@ using UnityEngine;
 public class ConveyorController : BuildingBehaviour
 {
     public Vector3 pushDir;
-
-    void Start()
-    {
-        Size = new Vector2(1, 1);
-    }
+    public override Vector3 Size { get; } = new Vector2(1, 1);
 
     public override void Activate()
     {
