@@ -8,10 +8,13 @@ public class BuildingGUIController : MonoBehaviour
     public TextMeshProUGUI nameText;
     public GameObject input,
         output,
+        recipeContent,
+        recipePrefab,
         slotPrefab,
         itemPrefab;
     public RectTransform processingForeground;
-    BuildingBehaviour building;
+    ProcessingBuildingBehaviour building;
+    RecipeScriptableObject[] recipes;
     Slot[] inputSlots;
     Slot outputSlot;
 
@@ -24,7 +27,8 @@ public class BuildingGUIController : MonoBehaviour
         string name,
         int inputCount,
         bool needsFuel,
-        BuildingBehaviour building
+        ProcessingBuildingBehaviour building,
+        RecipeScriptableObject[] recipes
     )
     {
         nameText.text = name;
@@ -37,12 +41,27 @@ public class BuildingGUIController : MonoBehaviour
             inputSlots[i].Initialize(SlotType.input, i, this);
         }
 
-        var outputSlot = Instantiate(slotPrefab);
-        outputSlot.transform.SetParent(output.transform);
-        this.outputSlot = outputSlot.GetComponent<Slot>();
+        this.outputSlot = output.GetComponent<Slot>();
         this.outputSlot.Initialize(SlotType.output, 0, this);
+        for (int i = 0; i < recipes.Length; i++)
+        {
+            var recipeView = Instantiate(recipePrefab);
+            recipeView.GetComponent<Recipe>().Initialize(recipes[i], this);
+            recipeView.transform.SetParent(recipeContent.transform, false);
+            recipeView.transform.position -= new Vector3(x: 0, y: i * 20);
+        }
+        var recipeContentTransform = recipeContent.GetComponent<RectTransform>();
+        recipeContentTransform.sizeDelta = new Vector2(
+            recipeContentTransform.sizeDelta.x,
+            20 * recipes.Length
+        );
         // TODO fuel
         this.building = building;
+    }
+
+    public void SelectRecipe(RecipeScriptableObject recipe)
+    {
+        building.SetRecipe(recipe);
     }
 
     public enum SlotType

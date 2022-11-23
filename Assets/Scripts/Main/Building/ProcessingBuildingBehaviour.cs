@@ -19,15 +19,12 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
         {
             if (GUIController != null)
             {
-                GUIController.SetSlot(
-                    BuildingGUIController.SlotType.output,
-                    0,
-                    value
-                );
+                GUIController.SetSlot(BuildingGUIController.SlotType.output, 0, value);
             }
             output = value;
         }
     }
+
     public RecipeScriptableObject[] recipes;
     public RecipeScriptableObject currentRecipe;
     protected float processingUntil = 0f;
@@ -38,45 +35,53 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
     protected BuildingGUIController GUIController;
     public GameObject buildingGUIPrefab;
 
+    public void SetRecipe(RecipeScriptableObject newRecipe)
+    {
+        this.currentRecipe = newRecipe;
+    }
+
     public override bool Input(ItemStack itemStack, string inputName)
     {
-        if (Active)
+        if (Active && currentRecipe != null)
         {
             // If item already in Processing add to item count and return true
             for (int i = 0; i < Processing.Count; i++)
             {
                 if (
                     Processing[i]?.item.type == itemStack.item.type
-                    && itemStack.amount + Processing[i].amount <= ItemStack.MAX_ITEMS
                 )
                 {
-                    Processing[i] = new ItemStack(
-                        item: Processing[i].item,
-                        amount: (byte)(Processing[i].amount + itemStack.amount)
-                    );
-                    return true;
+                    if (
+                itemStack.amount + Processing[i].amount <= ItemStack.MAX_ITEMS
+                                )
+                    {
+                        Processing[i] = new ItemStack(
+                            item: Processing[i].item,
+                            amount: (byte)(Processing[i].amount + itemStack.amount)
+                        );
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            foreach (RecipeScriptableObject.RecipeItem input in currentRecipe.inputs)
+            {
+                if (input.type == itemStack.item.type)
+                {
+                    for (int i = 0; i < Processing.Count; i++)
+                    {
+                        if (Processing[i] == null)
+                        {
+                            Processing[i] = itemStack;
+                            return true;
+                        }
+                    }
                 }
             }
 
-            if (currentRecipe == null)
-            {
-                // Get first recipe with all current processing items and new item
-                var recipe = recipes.First(recipe =>
-                {
-                    foreach (var item in Processing.Where(item => item != null))
-                    {
-                        if (recipe.inputs.First(input => input.type == item.item.type) == null)
-                            return false;
-                    }
-                    return recipe.inputs.First(input => input.type == itemStack.item.type) != null;
-                });
-                if (recipe != null)
-                {
-                    currentRecipe = recipe;
-                    Processing[0] = itemStack;
-                    processingUntil = Time.time + recipe.processingTime;
-                }
-            }
         }
         return false;
     }
@@ -87,6 +92,13 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
         {
             if (currentRecipe != null)
             {
+                for (int i = 0; i < currentRecipe.inputs.Length; i++)
+                {
+                    if (Processing[i] == null || Processing[i].amount < currentRecipe.inputs[i].amount)
+                    {
+                        return;
+                    }
+                }
                 if (Time.time > processingUntil)
                 {
                     // If output occupied but different item or would go over limit
@@ -94,8 +106,7 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
                         Output != null
                         && (
                             Output.item.type != currentRecipe.output.type
-                            || Output.amount + currentRecipe.output.amount
-                                > ItemStack.MAX_ITEMS
+                            || Output.amount + currentRecipe.output.amount > ItemStack.MAX_ITEMS
                         )
                     )
                     {
@@ -124,11 +135,13 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
                     }
                     processingUntil = Time.time + currentRecipe.processingTime;
 
-
-                    Processing[0] = new ItemStack(
-                        item: Processing[0].item,
-                        amount: (byte)(Processing[0].amount - 1)
-                    );
+                    for (int i = 0; i < currentRecipe.inputs.Length; i++)
+                    {
+                        Processing[i] = new ItemStack(
+                            item: Processing[i].item,
+                            amount: (byte)(Processing[i].amount - currentRecipe.inputs[i].amount)
+                       );
+                    }
                     OutputItem();
                 }
                 else
@@ -141,10 +154,6 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
                         );
                     }
                 }
-            }
-            else
-            {
-                currentRecipe = null;
             }
         }
     }
@@ -165,10 +174,7 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
                 amount: 1
             );
             item.transform.position = outputPos;
-            Output = new ItemStack(
-                item: Output.item,
-                amount: (byte)(Output.amount - 1)
-            );
+            Output = new ItemStack(item: Output.item, amount: (byte)(Output.amount - 1));
         }
         else
         {
@@ -193,22 +199,15 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
 
     private void HandleInputChange(object sender, NotifyCollectionChangedEventArgs e)
     {
+        if (e.NewItems[0] != null && ((ItemStack)e.NewItems[0]).amount == 0)
+        {
+            Processing[e.NewStartingIndex] = null;
+            return;
+        }
         if (GUIController != null)
         {
             GUIController.SetSlot(
                 BuildingGUIController.SlotType.input,
-                e.NewStartingIndex,
-                (ItemStack)e.NewItems[0]
-            );
-        }
-    }
-
-    private void HandleOutputChange(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (GUIController != null)
-        {
-            GUIController.SetSlot(
-                BuildingGUIController.SlotType.output,
                 e.NewStartingIndex,
                 (ItemStack)e.NewItems[0]
             );
@@ -221,7 +220,7 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
         {
             var buildGUI = Instantiate(buildingGUIPrefab);
             GUIController = buildGUI.GetComponent<BuildingGUIController>();
-            GUIController.Initialize(NAME, MAX_INPUTS, true, this);
+            GUIController.Initialize(NAME, MAX_INPUTS, true, this, recipes);
             for (int i = 0; i < MAX_INPUTS; i++)
             {
                 GUIController.SetSlot(BuildingGUIController.SlotType.input, i, Processing[0]);

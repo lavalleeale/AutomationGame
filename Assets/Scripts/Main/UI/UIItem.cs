@@ -13,23 +13,33 @@ public class UIItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     TextMeshProUGUI count;
     Vector3 startPos;
     public static GameObject itemBeingDragged;
+    public bool CanDrag = true;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        startPos = transform.position;
-        itemBeingDragged = gameObject;
-        cg.blocksRaycasts = false;
-        transform.SetParent(canvas.transform);
+        if (CanDrag)
+        {
+            startPos = transform.position;
+            itemBeingDragged = gameObject;
+            cg.blocksRaycasts = false;
+            transform.SetParent(canvas.transform);
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        transform.position = Input.mousePosition;
+        if (CanDrag)
+        {
+            transform.position = Input.mousePosition;
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        cg.blocksRaycasts = true;
+        if (CanDrag)
+        {
+            cg.blocksRaycasts = true;
+        }
     }
 
     // Start is called before the first frame update

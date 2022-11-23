@@ -121,7 +121,10 @@ public class PersistenceManager : MonoBehaviour
                     furnaces[i].transform.position
                 ),
                 inputs: inputs,
-                output: new SavedItemStack(type: controller.Output.item.type, amount: controller.Output.amount)
+                output: new SavedItemStack(
+                    type: controller.Output.item.type,
+                    amount: controller.Output.amount
+                )
             );
         }
 
@@ -224,7 +227,10 @@ public class PersistenceManager : MonoBehaviour
                     );
                 }
 
-                behaviour.Output = new ItemStack(item: buildingData.output.type.GetItem(), amount: buildingData.output.amount);
+                behaviour.Output = new ItemStack(
+                    item: buildingData.output.type.GetItem(),
+                    amount: buildingData.output.amount
+                );
             }
             else
             {

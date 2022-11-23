@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: acbb5536cc66343b98c61f9fbad8fb9f, type: 3}
-  m_Name: Copper
+  m_Name: Copper Plate
   m_EditorClassIdentifier: 
   inputs:
-  - type: 2
-    amount: 1
+  - type: 4
+    amount: 2
   output:
-    type: 4
+    type: 7
     amount: 1
   processingTime: 0.5

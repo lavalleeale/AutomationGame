@@ -578,6 +578,7 @@ MonoBehaviour:
   conveyorPrefab: {fileID: 7378773458418211619, guid: ae949f05800964dbbaee7b0a1decfc5d, type: 3}
   furnacePrefab: {fileID: 7929278395407725819, guid: 592e39367210b4e92a17b82bbc23278e, type: 3}
   mergerPrefab: {fileID: 3864031508014601130, guid: 62ed6dd2aa97348bc9a4aae7a6d8950d, type: 3}
+  constructorPrefab: {fileID: 7929278395407725819, guid: 9e4f461f41ff24cc49834691551dfbda, type: 3}
 --- !u!1 &748948392
 GameObject:
   m_ObjectHideFlags: 0

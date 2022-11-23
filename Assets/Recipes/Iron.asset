@@ -15,7 +15,7 @@ MonoBehaviour:
   inputs:
   - type: 1
     amount: 1
-  outputs:
-  - type: 3
+  output:
+    type: 3
     amount: 1
   processingTime: 0.5

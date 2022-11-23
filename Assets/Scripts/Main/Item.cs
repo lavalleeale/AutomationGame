@@ -28,13 +28,25 @@ public class Item
 
     public static readonly Item COPPER = new("Copper", Type.copper, "ingot_copper");
 
+    public static readonly Item IRON_PLATE = new("Iron Plate", Type.iron_plate, "iron_plate");
+
+    public static readonly Item IRON_CABlE = new("Iron Cable", Type.iron_cable, "iron_cable");
+
+    public static readonly Item COPPER_PLATE = new("Copper Plate", Type.copper_plate, "copper_plate");
+
+    public static readonly Item COPPER_WIRE = new("Copper Wire", Type.copper_wire, "copper_wire");
+
     public enum Type : byte
     {
         coal,
         iron_ore,
         copper_ore,
         iron,
-        copper
+        copper,
+        iron_plate,
+        iron_cable,
+        copper_plate,
+        copper_wire
     }
 }
 
@@ -54,6 +66,14 @@ public static class ItemExtensions
                 return Item.IRON;
             case Item.Type.copper:
                 return Item.COPPER;
+            case Item.Type.iron_plate:
+                return Item.IRON_PLATE;
+            case Item.Type.iron_cable:
+                return Item.IRON_CABlE;
+            case Item.Type.copper_plate:
+                return Item.COPPER_PLATE;
+            case Item.Type.copper_wire:
+                return Item.COPPER_WIRE;
             default:
                 throw new System.NotImplementedException("Unkown Item");
         }
