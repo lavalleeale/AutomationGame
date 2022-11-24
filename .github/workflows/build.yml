@@ -45,6 +45,7 @@ jobs:
           path: Assets/Scripts/MessagePackGenerated.cs
 
   build:
+    needs: gen
     name: Build my project ✨
     runs-on: ubuntu-latest
     strategy:
