@@ -603,14 +603,14 @@ namespace MessagePack.Formatters
             {
                 { "x", 0 },
                 { "y", 1 },
-                { "capacity", 2 },
+                { "offset", 2 },
             };
 
             this.____stringByteKeys = new byte[][]
             {
                 global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("x"),
                 global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("y"),
-                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("capacity"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("offset"),
             };
         }
 
@@ -629,7 +629,7 @@ namespace MessagePack.Formatters
             writer.WriteRaw(this.____stringByteKeys[1]);
             writer.Write(value.y);
             writer.WriteRaw(this.____stringByteKeys[2]);
-            writer.Write(value.capacity);
+            writer.Write(value.offset);
         }
 
         public global::SavedOre Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -644,7 +644,7 @@ namespace MessagePack.Formatters
             var length = reader.ReadMapHeader();
             var __x__ = default(int);
             var __y__ = default(int);
-            var __capacity__ = default(int);
+            var __offset__ = default(int);
 
             for (int i = 0; i < length; i++)
             {
@@ -665,7 +665,7 @@ namespace MessagePack.Formatters
                         __y__ = reader.ReadInt32();
                         break;
                     case 2:
-                        __capacity__ = reader.ReadInt32();
+                        __offset__ = reader.ReadInt32();
                         break;
                     default:
                         reader.Skip();
@@ -673,10 +673,10 @@ namespace MessagePack.Formatters
                 }
             }
 
-            var ____result = new global::SavedOre(__x__, __y__, __capacity__);
+            var ____result = new global::SavedOre(__x__, __y__, __offset__);
             ____result.x = __x__;
             ____result.y = __y__;
-            ____result.capacity = __capacity__;
+            ____result.offset = __offset__;
             reader.Depth--;
             return ____result;
         }

@@ -8,7 +8,7 @@ public class MinerController : BuildingBehaviour
 {
     public override Vector3 Size { get; } = new Vector2(1, 1);
     public GameObject itemPrefab;
-    List<OreController> ores = new();
+    List<OreData> oreData = new();
     float generationSpeed = 0.5f;
     float nextGeneration = 0;
     Vector3 itemPos;
@@ -25,7 +25,7 @@ public class MinerController : BuildingBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Active && ores.Count > 0)
+        if (Active && oreData.Count > 0)
         {
             if (Time.time > nextGeneration)
             {
@@ -35,10 +35,15 @@ public class MinerController : BuildingBehaviour
                 {
                     var item = Instantiate(itemPrefab);
                     item.GetComponent<ItemController>().itemStack = new ItemStack(
-                        item: ores[0].drop,
+                        item: oreData[0].type.GetDrop(),
                         amount: 1
                     );
-                    ores[0].Strength--;
+                    oreData[0].amount -= 1;
+                    WorldGenerationController.oreStrengthOffsets[oreData[0].pos] += 1;
+                    if (oreData[0].amount == 0)
+                    {
+                        oreData.RemoveAt(0);
+                    }
                     item.transform.position = itemPos;
                 }
             }
@@ -56,7 +61,20 @@ public class MinerController : BuildingBehaviour
             )
         )
         {
-            ores.Add(ore.GetComponent<OreController>());
+            var grid = GameObject.Find("Building Grid").GetComponent<Grid>();
+            var controller = ore.GetComponent<OreController>();
+            if (controller.Active)
+            {
+                WorldGenerationController.oreStrengthOffsets[controller.pos] =
+                    WorldGenerationController.oreStrengthOffsets.GetValueOrDefault(controller.pos);
+                oreData.Add(
+                    new OreData(
+                        pos: controller.pos,
+                        type: controller.type,
+                        amount: controller.Strength
+                    )
+                );
+            }
         }
     }
 
@@ -68,5 +86,19 @@ public class MinerController : BuildingBehaviour
             Quaternion.AngleAxis(transform.localRotation.eulerAngles.z, Vector3.forward)
             * new Vector3(x: 0, y: -0.64f, z: 0);
         itemPos = transform.position + itemOffset;
+    }
+
+    public class OreData
+    {
+        public Vector3Int pos;
+        public int amount;
+        public OreController.Type type;
+
+        public OreData(Vector3Int pos, int amount, OreController.Type type)
+        {
+            this.pos = pos;
+            this.amount = amount;
+            this.type = type;
+        }
     }
 }

@@ -9,20 +9,14 @@ public abstract class TooltipBehaviour : MonoBehaviour
     private GameObject canvas,
         tooltip;
     Sprite tooltipSprite;
-    string tooltipName,
-        tooltipInfo;
+    string tooltipName;
+    public abstract string tooltipInfo { get; }
 
-    public void InitializeTooltip(string name, string info, Sprite sprite)
+    public void InitializeTooltip(string name, Sprite sprite)
     {
-        this.tooltipInfo = info;
         this.tooltipName = name;
         this.tooltipSprite = sprite;
-        canvas = GameObject.Find("Canvas");
-    }
-
-    public void UpdateTooltipInfo(string newInfo)
-    {
-        this.tooltipInfo = newInfo;
+        canvas = GameObject.FindGameObjectWithTag("canvas");
     }
 
     void OnMouseEnter()

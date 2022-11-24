@@ -13,17 +13,15 @@ public class ItemController : TooltipBehaviour
     LayerMask moveMask;
     LayerMask inputMask;
 
+    public override string tooltipInfo => $"Amount: {Helpers.FormatNumber(itemStack.amount)}";
+
     // Start is called before the first frame update
     void Start()
     {
         GetComponent<SpriteRenderer>().sprite = itemStack.item.sprite;
         moveMask = LayerMask.GetMask("items", "buildings");
         inputMask = LayerMask.GetMask("input");
-        InitializeTooltip(
-            itemStack.item.name,
-            $"Amount: {Helpers.FormatNumber(itemStack.amount)}",
-            itemStack.item.sprite
-        );
+        InitializeTooltip(itemStack.item.name, itemStack.item.sprite);
     }
 
     // Update is called once per frame

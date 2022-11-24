@@ -50,12 +50,16 @@ public class PlacingController : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                if (Physics2D.OverlapBoxAll(
-                    point: placing.transform.position,
-                    size: placing.Size * 0.32f,
-                    angle: 0,
-                    layerMask: buildingsMask
-                ).Length != 1)
+                if (
+                    Physics2D
+                        .OverlapBoxAll(
+                            point: placing.transform.position,
+                            size: placing.Size * 0.32f,
+                            angle: 0,
+                            layerMask: buildingsMask
+                        )
+                        .Length != 1
+                )
                 {
                     return;
                 }

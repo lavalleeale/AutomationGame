@@ -20,7 +20,7 @@ public class BuildingGUIController : MonoBehaviour
 
     void Start()
     {
-        transform.SetParent(GameObject.Find("Canvas").transform, false);
+        transform.SetParent(GameObject.FindGameObjectWithTag("canvas").transform, false);
     }
 
     public void Initialize(

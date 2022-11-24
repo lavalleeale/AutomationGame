@@ -99,17 +99,18 @@ public class PersistenceManager : MonoBehaviour
         var miners = GameObject.FindGameObjectsWithTag("miner");
         var conveyors = GameObject.FindGameObjectsWithTag("conveyor");
         var items = GameObject.FindGameObjectsWithTag("item");
-        var ores = GameObject.FindGameObjectsWithTag("ore");
 
         var data = new SaveData(
             buildings: new SavedBuilding[miners.Length + conveyors.Length],
             processingBuildings: new SavedProcessingBuilding[furnaces.Length + constructors.Length],
             items: new SavedWorldItemStack[items.Length],
-            chunks: worldGenController.loadedChunks
+            chunks: worldGenController.knownChunks
                 .Select(i => new LoadedChunk(x: i.x, y: i.y))
                 .ToArray(),
-            ores: new SavedOre[ores.Length],
-            seed: worldGenController.seed
+            ores: WorldGenerationController.oreStrengthOffsets
+                .Select((ore) => new SavedOre(pos: ore.Key, offset: ore.Value))
+                .ToArray(),
+            seed: WorldGenerationController.seed
         );
 
         for (int i = 0; i < furnaces.Length; i++)
@@ -199,17 +200,6 @@ public class PersistenceManager : MonoBehaviour
                 position: worldGenController.buildingGrid.WorldToCell(
                     items[i].transform.position - Vector3.one * 0.32f
                 )
-            );
-        }
-
-        for (int i = 0; i < ores.Length; i++)
-        {
-            var ore = ores[i].GetComponent<OreController>();
-            data.ores[i] = new SavedOre(
-                pos: worldGenController.buildingGrid.WorldToCell(
-                    ore.transform.position - Vector3.one * 0.32f
-                ),
-                capacity: ore.Strength
             );
         }
 
@@ -327,18 +317,12 @@ public class PersistenceManager : MonoBehaviour
             );
         }
 
-        foreach (var oreData in data.ores)
-        {
-            var ore = Instantiate(orePrefab);
-            ore.transform.position =
-                worldGenController.buildingGrid.CellToWorld(
-                    new Vector3Int(x: oreData.x, y: oreData.y)
-                )
-                + Vector3.one * 0.32f;
-            ore.GetComponent<OreController>().Strength = oreData.capacity;
-        }
+        WorldGenerationController.oreStrengthOffsets = data.ores.ToDictionary(
+            keySelector: (ore) => new Vector3Int(x: ore.x, y: ore.y),
+            elementSelector: ore => ore.offset
+        );
 
-        worldGenController.loadedChunks = data.chunks
+        worldGenController.knownChunks = data.chunks
             .Select(i => new Vector3Int(x: i.x, y: i.y))
             .ToList();
 
@@ -395,20 +379,20 @@ public class SavedOre
     public int y;
 
     [Key(2)]
-    public int capacity;
+    public int offset;
 
-    public SavedOre(Vector3Int pos, int capacity)
+    public SavedOre(Vector3Int pos, int offset)
     {
         this.x = pos.x;
         this.y = pos.y;
-        this.capacity = capacity;
+        this.offset = offset;
     }
 
-    public SavedOre(int x, int y, int capacity)
+    public SavedOre(int x, int y, int offset)
     {
         this.x = x;
         this.y = y;
-        this.capacity = capacity;
+        this.offset = offset;
     }
 }
 

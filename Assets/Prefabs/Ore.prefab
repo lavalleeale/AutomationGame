@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 309520896328236986}
   - component: {fileID: 309520896328236997}
   - component: {fileID: 309520896328236987}
-  - component: {fileID: 309520896328236984}
+  - component: {fileID: -103716665998348443}
   m_Layer: 7
   m_Name: Ore
   m_TagString: ore
@@ -32,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &309520896328236997
 SpriteRenderer:
@@ -41,7 +41,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 309520896328236996}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -102,15 +102,19 @@ MonoBehaviour:
   ironSprite: {fileID: 1455285045, guid: 2f97c7f43ddf542bd80cebfd1347fb93, type: 3}
   coalSprite: {fileID: 1153971239, guid: 2f97c7f43ddf542bd80cebfd1347fb93, type: 3}
   copperSprite: {fileID: 1951872255, guid: 2f97c7f43ddf542bd80cebfd1347fb93, type: 3}
+  Active: 0
+  strength: 0
   type: 0
---- !u!61 &309520896328236984
+  spriteRenderer: {fileID: 309520896328236997}
+  boxCollider: {fileID: -103716665998348443}
+--- !u!61 &-103716665998348443
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 309520896328236996}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1

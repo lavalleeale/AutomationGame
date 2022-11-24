@@ -6,46 +6,50 @@ public class OreController : TooltipBehaviour
     public Sprite ironSprite;
     public Sprite coalSprite;
     public Sprite copperSprite;
-    int strength;
+
+    public bool Active = false;
     public int Strength
     {
-        get { return strength; }
-        set
-        {
-            UpdateTooltipInfo($"Amount: {Helpers.FormatNumber(value)}");
-            strength = value;
-        }
+        get { return WorldGenerationController.GetOreStrength(pos: pos, type: type); }
     }
-
     public Type type;
-    public Item drop;
+    public Vector3Int pos;
+
+    public SpriteRenderer spriteRenderer;
+    public BoxCollider2D boxCollider;
+
+    public override string tooltipInfo => $"Amount: {Helpers.FormatNumber(Strength)}";
 
     // Start is called before the first frame update
-    void Start()
+    public void Setup(Type type, Vector3Int pos)
     {
-        var spriteRenderer = GetComponent<SpriteRenderer>();
+        this.pos = pos;
+        spriteRenderer.enabled = true;
+        boxCollider.enabled = true;
+        this.type = type;
         switch (type)
         {
             case Type.coal:
-                drop = Item.COAL;
                 spriteRenderer.sprite = coalSprite;
-                InitializeTooltip("Coal", $"Amount: {Helpers.FormatNumber(strength)}", coalSprite);
+                InitializeTooltip("Coal", coalSprite);
                 break;
             case Type.copper:
-                drop = Item.COPPER_ORE;
                 spriteRenderer.sprite = copperSprite;
-                InitializeTooltip(
-                    "Copper",
-                    $"Amount: {Helpers.FormatNumber(strength)}",
-                    copperSprite
-                );
+                InitializeTooltip("Copper", copperSprite);
                 break;
             case Type.iron:
-                drop = Item.IRON_ORE;
                 spriteRenderer.sprite = ironSprite;
-                InitializeTooltip("Iron", $"Amount: {Helpers.FormatNumber(strength)}", ironSprite);
+                InitializeTooltip("Iron", ironSprite);
                 break;
         }
+        Active = true;
+    }
+
+    public void Deactivate()
+    {
+        spriteRenderer.enabled = false;
+        boxCollider.enabled = false;
+        Active = false;
     }
 
     public enum Type
@@ -53,5 +57,23 @@ public class OreController : TooltipBehaviour
         iron,
         coal,
         copper
+    }
+}
+
+public static class OreExtensions
+{
+    public static Item GetDrop(this OreController.Type oreType)
+    {
+        switch (oreType)
+        {
+            case OreController.Type.iron:
+                return Item.IRON_ORE;
+            case OreController.Type.copper:
+                return Item.COPPER_ORE;
+            case OreController.Type.coal:
+                return Item.COAL;
+            default:
+                throw new System.NotImplementedException("Unkown Item");
+        }
     }
 }

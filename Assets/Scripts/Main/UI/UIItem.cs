@@ -45,7 +45,7 @@ public class UIItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     // Start is called before the first frame update
     void Start()
     {
-        canvas = GameObject.Find("Canvas");
+        canvas = GameObject.FindGameObjectWithTag("canvas");
         cg = GetComponent<CanvasGroup>();
         GetComponentInChildren<TextMeshProUGUI>().text = itemStack.amount.ToString();
         GetComponent<Image>().sprite = itemStack.item.sprite;

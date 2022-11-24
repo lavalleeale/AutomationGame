@@ -9,6 +9,7 @@ TagManager:
   - furnace
   - miner
   - conveyor
+  - constructor
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - ores
   - buildings
   - input
-  - 
+  - conveyors
   - 
   - 
   - 

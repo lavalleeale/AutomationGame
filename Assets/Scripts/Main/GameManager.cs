@@ -10,4 +10,5 @@ using System.Collections.ObjectModel;
 public class GameManager : MonoBehaviour
 {
     public static bool inGUI;
+    public static Grid grid;
 }
