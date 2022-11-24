@@ -3,49 +3,7 @@ name: Actions 😎
 on: [push, pull_request]
 
 jobs:
-  gen:
-    name: MessagePack AOT compilation
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          lfs: true
-
-      # Cache
-      - uses: actions/cache@v2
-        with:
-          path: Library
-          key: Library-${{ matrix.targetPlatform }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-${{ matrix.targetPlatform }}-
-            Library-
-
-      # Gen
-      - name: Build project
-        uses: game-ci/unity-builder@v2
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          unityVersion: 2022.1.22f1
-          targetPlatform: ${{ matrix.targetPlatform }}
-          buildMethod: UnityEditor.SyncVS.SyncSolution
-
-      - name: Install Dotnet Tools
-        run: dotnet tool restore
-
-      - name: Generate MPC
-        run: dotnet mpc -i Assembly-CSharp.csproj -o Assets/Scripts/MessagePackGenerated.cs
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: MPC
-          path: Assets/Scripts/MessagePackGenerated.cs
-
   build:
-    needs: gen
     name: Build my project ✨
     runs-on: ubuntu-latest
     strategy:
@@ -70,11 +28,6 @@ jobs:
           restore-keys: |
             Library-${{ matrix.targetPlatform }}-
             Library-
-      - name: Download MPC
-        uses: actions/download-artifact@v3
-        with:
-          name: MPC
-          path: Assets/Scripts/
 
       # Build
       - name: Build project
