@@ -53,8 +53,7 @@ public class PersistenceManager : MonoBehaviour
         for (int i = 0; i < saveFiles.Length; i++)
         {
             var button = Instantiate(loadPrefab);
-            button.transform.SetParent(loadMenu.transform.parent, false);
-            button.transform.position = button.transform.position - new Vector3(x: 0, y: i * 30);
+            button.transform.SetParent(loadMenu.transform, false);
             button.GetComponentInChildren<TextMeshProUGUI>().text = saveFiles[i];
             button.GetComponent<Button>().onClick.AddListener(setToLoad(saveFiles[i]));
         }
