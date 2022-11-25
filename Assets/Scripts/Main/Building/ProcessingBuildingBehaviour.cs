@@ -148,10 +148,13 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
                             amount: (byte)(Processing[i].amount - currentRecipe.inputs[i].amount)
                         );
                     }
-                    OutputItem();
                 }
                 else
                 {
+                    if (Output != null)
+                    {
+                        OutputItem();
+                    }
                     if (GUIController != null)
                     {
                         GUIController.UpdateProgress(
@@ -181,13 +184,6 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
             );
             item.transform.position = outputPos;
             Output = new ItemStack(item: Output.item, amount: (byte)(Output.amount - 1));
-        }
-        else
-        {
-            if (GUIController != null)
-            {
-                GUIController.UpdateProgress(1);
-            }
         }
     }
 

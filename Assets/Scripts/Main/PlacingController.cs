@@ -65,25 +65,17 @@ public class PlacingController : MonoBehaviour
                 }
                 placing.GetComponent<SpriteRenderer>().color = new Color(r: 1, g: 1, b: 1, a: 1);
                 placing.Activate();
-                var items = Physics2D.OverlapBoxAll(
-                    point: placing.transform.position,
-                    size: placing.Size * 0.32f,
-                    angle: 0,
-                    layerMask: itemsMask
-                );
-                if (items != null)
-                {
-                    foreach (
-                        var item in Physics2D.OverlapBoxAll(
-                            point: placing.transform.position,
-                            size: placing.Size,
-                            angle: 0,
-                            layerMask: itemsMask
-                        )
+
+                foreach (
+                    var item in Physics2D.OverlapBoxAll(
+                        point: placing.transform.position,
+                        size: placing.Size * 0.32f,
+                        angle: 0,
+                        layerMask: itemsMask
                     )
-                    {
-                        Destroy(item.gameObject);
-                    }
+                )
+                {
+                    Destroy(item.gameObject);
                 }
                 placing = null;
             }

@@ -15,4 +15,12 @@ public abstract class BuildingBehaviour : MonoBehaviour
     {
         return false;
     }
+
+    private void OnMouseOver()
+    {
+        if (Active && UnityEngine.Input.GetMouseButtonDown(1))
+        {
+            Destroy(gameObject);
+        }
+    }
 }

@@ -83,7 +83,11 @@ public static class ItemExtensions
 
 public class ItemStack
 {
+#if UNITY_EDITOR
     public static readonly int MAX_ITEMS = 5;
+#else
+    public static readonly int MAX_ITEMS = 99;
+#endif
     public Item item;
     public byte amount;
 
