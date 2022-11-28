@@ -10,6 +10,7 @@ TagManager:
   - miner
   - conveyor
   - constructor
+  - canvas
   layers:
   - Default
   - TransparentFX
@@ -55,4 +56,7 @@ TagManager:
     locked: 0
   - name: items
     uniqueID: 1927998467
+    locked: 0
+  - name: player
+    uniqueID: 1001052097
     locked: 0

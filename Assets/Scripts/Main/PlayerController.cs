@@ -2,17 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
-    public float speed = 10;
+    public float speed = 100;
     bool showingOverview;
     float oldSize;
     public Camera cam;
     public Grid grid;
+    public Rigidbody2D rb;
     public WorldGenerationController worldGenController;
-    public GameObject groundPrefab;
 
-    void Update()
+    //public ItemStack[] inventory = new ItemStack[27];
+
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.M))
         {
@@ -38,11 +40,14 @@ public class CameraController : MonoBehaviour
                 7f
             );
         }
-        transform.position += new Vector3(
-            x: Input.GetAxis("Horizontal") * Time.deltaTime * speed * cam.orthographicSize,
-            y: Input.GetAxis("Vertical") * Time.deltaTime * speed * cam.orthographicSize
-        );
-
         worldGenController.LookAtCell(grid.WorldToCell(transform.position));
+    }
+
+    void FixedUpdate()
+    {
+        rb.velocity = new Vector3(
+            x: Input.GetAxis("Horizontal") * speed * cam.orthographicSize,
+            y: Input.GetAxis("Vertical") * speed * cam.orthographicSize
+        );
     }
 }

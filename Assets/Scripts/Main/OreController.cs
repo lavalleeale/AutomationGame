@@ -1,5 +1,7 @@
 using UnityEngine;
+using System;
 using UnityEngine.U2D;
+using System.Collections;
 
 public class OreController : TooltipBehaviour
 {
@@ -21,8 +23,9 @@ public class OreController : TooltipBehaviour
     public override string tooltipInfo => $"Amount: {Helpers.FormatNumber(Strength)}";
 
     // Start is called before the first frame update
-    public void Setup(Type type, Vector3Int pos)
+    public IEnumerator Setup(Type type, Vector3Int pos)
     {
+        yield return null;
         this.pos = pos;
         spriteRenderer.enabled = true;
         boxCollider.enabled = true;
