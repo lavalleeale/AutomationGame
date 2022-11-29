@@ -5,12 +5,10 @@ using UnityEngine;
 public class PlacingController : MonoBehaviour
 {
     public Grid grid;
-    public GameObject minerPrefab,
-        conveyorPrefab,
-        furnacePrefab,
-        mergerPrefab,
-        constructorPrefab,
-        assemblerPrefab;
+    public GameObject canvas, listPrefab, UIBuildingPrefab;
+    public GameObject[] buildingPrefabs;
+
+    GameObject buildingList;
 
     BuildingBehaviour placing;
     Quaternion targetPlacementRotation = Quaternion.identity;
@@ -81,71 +79,35 @@ public class PlacingController : MonoBehaviour
                 placing = null;
             }
         }
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.B))
         {
-            if (placing != null)
+            buildingList = Instantiate(listPrefab);
+            for (int i = 0; i < buildingPrefabs.Length; i++)
             {
-                Destroy(placing.gameObject);
+                var building = Instantiate(UIBuildingPrefab).GetComponent<UIBuildingController>();
+                building.Initialize(buildingPrefabs[i], this);
+                building.transform.SetParent(buildingList.transform, false);
             }
-
-            placing = Instantiate(minerPrefab).GetComponent<BuildingBehaviour>();
-            placing.transform.rotation = targetPlacementRotation;
-            placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
+            buildingList.transform.SetParent(canvas.transform, false);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            if (placing != null)
-            {
-                Destroy(placing.gameObject);
-            }
+        //else if (Input.GetKeyDown(KeyCode.Alpha6))
+        //{
+        //    if (placing != null)
+        //    {
+        //        Destroy(placing.gameObject);
+        //    }
 
-            placing = Instantiate(conveyorPrefab).GetComponent<BuildingBehaviour>();
-            placing.transform.rotation = targetPlacementRotation;
-            placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            if (placing != null)
-            {
-                Destroy(placing.gameObject);
-            }
+        //    placing = Instantiate(assemblerPrefab).GetComponent<BuildingBehaviour>();
+        //    placing.transform.rotation = targetPlacementRotation;
+        //    placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
+        //}
+    }
 
-            placing = Instantiate(furnacePrefab).GetComponent<BuildingBehaviour>();
-            placing.transform.rotation = targetPlacementRotation;
-            placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            if (placing != null)
-            {
-                Destroy(placing.gameObject);
-            }
-
-            placing = Instantiate(mergerPrefab).GetComponent<BuildingBehaviour>();
-            placing.transform.rotation = targetPlacementRotation;
-            placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            if (placing != null)
-            {
-                Destroy(placing.gameObject);
-            }
-
-            placing = Instantiate(constructorPrefab).GetComponent<BuildingBehaviour>();
-            placing.transform.rotation = targetPlacementRotation;
-            placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha6))
-        {
-            if (placing != null)
-            {
-                Destroy(placing.gameObject);
-            }
-
-            placing = Instantiate(assemblerPrefab).GetComponent<BuildingBehaviour>();
-            placing.transform.rotation = targetPlacementRotation;
-            placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
-        }
+    public void StartPlacing(GameObject buildingPrefab)
+    {
+        Destroy(buildingList);
+        placing = Instantiate(buildingPrefab).GetComponent<BuildingBehaviour>();
+        placing.transform.rotation = targetPlacementRotation;
+        placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
     }
 }

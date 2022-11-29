@@ -702,12 +702,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 2071698253}
-  minerPrefab: {fileID: 6085766958627856725, guid: 2f3352b00f506413e94133d0a58f7952, type: 3}
-  conveyorPrefab: {fileID: 7378773458418211619, guid: ae949f05800964dbbaee7b0a1decfc5d, type: 3}
-  furnacePrefab: {fileID: 7929278395407725819, guid: 592e39367210b4e92a17b82bbc23278e, type: 3}
-  mergerPrefab: {fileID: 3864031508014601130, guid: 62ed6dd2aa97348bc9a4aae7a6d8950d, type: 3}
-  constructorPrefab: {fileID: 7929278395407725819, guid: 9e4f461f41ff24cc49834691551dfbda, type: 3}
-  assemblerPrefab: {fileID: 7929278395407725819, guid: bca672b2f667840e0a34aca3f458fbdf, type: 3}
+  canvas: {fileID: 1152291199}
+  listPrefab: {fileID: 2624920154568248552, guid: 0ac312e0b5d6d4e369c5abd50de42c3d, type: 3}
+  UIBuildingPrefab: {fileID: 4835515592087176204, guid: f097690f8e0ce490b9da4a9df25c48e2, type: 3}
+  buildingPrefabs:
+  - {fileID: 6085766958627856725, guid: 2f3352b00f506413e94133d0a58f7952, type: 3}
+  - {fileID: 7378773458418211619, guid: ae949f05800964dbbaee7b0a1decfc5d, type: 3}
+  - {fileID: 7929278395407725819, guid: 592e39367210b4e92a17b82bbc23278e, type: 3}
+  - {fileID: 3864031508014601130, guid: 62ed6dd2aa97348bc9a4aae7a6d8950d, type: 3}
+  - {fileID: 7929278395407725819, guid: 9e4f461f41ff24cc49834691551dfbda, type: 3}
+  - {fileID: 7929278395407725819, guid: bca672b2f667840e0a34aca3f458fbdf, type: 3}
 --- !u!1 &748948392
 GameObject:
   m_ObjectHideFlags: 0

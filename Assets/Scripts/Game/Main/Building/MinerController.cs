@@ -11,13 +11,11 @@ public class MinerController : OutputBuildingBehaviour
     List<OreData> oreData = new();
     float generationSpeed = 0.5f;
     float nextGeneration = 0;
-
-    LayerMask spawnMask;
     LayerMask oreMask;
 
     void Start()
     {
-        spawnMask = LayerMask.GetMask("items", "buildings");
+        outputMask = LayerMask.GetMask("items", "buildings");
         oreMask = LayerMask.GetMask("ores");
     }
 
