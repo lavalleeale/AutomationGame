@@ -33,7 +33,7 @@ public class PersistenceManager : MonoBehaviour
     void Start()
     {
         var t = new DirectoryInfo(Application.persistentDataPath);
-        saveFiles = t.GetFiles().Select(file => file.Name).ToArray();
+        saveFiles = t.GetFiles("*.dat").Select(file => file.Name.Replace(".dat", "")).ToArray();
         if (saveFiles.Length == 0)
         {
             loadButton.interactable = false;
@@ -63,7 +63,7 @@ public class PersistenceManager : MonoBehaviour
     {
         return () =>
         {
-            toLoad = target;
+            toLoad = $"{target}.dat";
             SceneManager.LoadScene("Main");
             SceneManager.activeSceneChanged += OnSceneLoaded;
         };
