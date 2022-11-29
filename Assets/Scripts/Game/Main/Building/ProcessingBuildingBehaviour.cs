@@ -145,12 +145,16 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
             }
             if (currentRecipe != null)
             {
-                for (int i = 0; i < currentRecipe.inputs.Length; i++)
+                if (GUIController != null)
                 {
-                    if (
-                        Processing[i] == null
-                        || Processing[i].amount < currentRecipe.inputs[i].amount
-                    )
+                    GUIController.UpdateProgress(
+                        Mathf.Clamp((currentRecipe.processingTime - (processingUntil - Time.time))
+                            / currentRecipe.processingTime, 0, 1)
+                    );
+                }
+                foreach (var input in currentRecipe.inputs)
+                {
+                    if (Processing.FirstOrDefault(item=>item?.item.type == input.type && item.amount > input.amount) == null)
                     {
                         return;
                     }
@@ -192,13 +196,6 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
                             amount: (byte)(Processing[i].amount - currentRecipe.inputs[i].amount)
                         );
                     }
-                }
-                if (GUIController != null)
-                {
-                    GUIController.UpdateProgress(
-                        (currentRecipe.processingTime - (processingUntil - Time.time))
-                            / currentRecipe.processingTime
-                    );
                 }
             }
             else
@@ -283,7 +280,7 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
             GUIController.Initialize(NAME, MAX_INPUTS, true, this, recipes);
             for (int i = 0; i < MAX_INPUTS; i++)
             {
-                GUIController.SetSlot(SlotController.SlotType.input, i, Processing[0]);
+                GUIController.SetSlot(SlotController.SlotType.input, i, Processing[i]);
             }
             GUIController.SetSlot(SlotController.SlotType.output, 0, Output);
         }

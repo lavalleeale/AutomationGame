@@ -9,7 +9,8 @@ public class PlacingController : MonoBehaviour
         conveyorPrefab,
         furnacePrefab,
         mergerPrefab,
-        constructorPrefab;
+        constructorPrefab,
+        assemblerPrefab;
 
     BuildingBehaviour placing;
     Quaternion targetPlacementRotation = Quaternion.identity;
@@ -132,6 +133,17 @@ public class PlacingController : MonoBehaviour
             }
 
             placing = Instantiate(constructorPrefab).GetComponent<BuildingBehaviour>();
+            placing.transform.rotation = targetPlacementRotation;
+            placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            if (placing != null)
+            {
+                Destroy(placing.gameObject);
+            }
+
+            placing = Instantiate(assemblerPrefab).GetComponent<BuildingBehaviour>();
             placing.transform.rotation = targetPlacementRotation;
             placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
         }

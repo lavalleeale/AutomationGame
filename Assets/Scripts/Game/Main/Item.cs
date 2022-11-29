@@ -78,6 +78,8 @@ public static class ItemExtensions
                 return Item.COPPER_PLATE;
             case Item.Type.copper_wire:
                 return Item.COPPER_WIRE;
+            case Item.Type.pcb:
+                return Item.PCB;
             default:
                 throw new System.NotImplementedException("Unkown Item");
         }

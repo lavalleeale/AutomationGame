@@ -19,6 +19,7 @@ public class PersistenceManager : MonoBehaviour
         conveyorPrefab,
         furnacePrefab,
         constructorPrefab,
+        assemblerPrefab,
         itemPrefab,
         orePrefab,
         loadPrefab;
@@ -293,10 +294,12 @@ public class PersistenceManager : MonoBehaviour
             {
                 case SavedProcessingBuilding.Type.furnace:
                     building = Instantiate(furnacePrefab);
-                    var controller = building.GetComponent<FurnaceController>();
                     break;
                 case SavedProcessingBuilding.Type.constructor:
                     building = Instantiate(constructorPrefab);
+                    break;
+                case SavedProcessingBuilding.Type.assembler:
+                    building = Instantiate(assemblerPrefab);
                     break;
                 default:
                     throw new System.NotImplementedException("unknown building");
@@ -508,7 +511,8 @@ public class SavedProcessingBuilding
     public enum Type : byte
     {
         furnace,
-        constructor
+        constructor,
+        assembler
     }
 }
 
