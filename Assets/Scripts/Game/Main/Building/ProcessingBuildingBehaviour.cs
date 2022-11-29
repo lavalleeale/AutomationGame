@@ -7,7 +7,7 @@ using System.Linq;
 using UnityEngine.EventSystems;
 using static BuildingGUIController;
 
-public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
+public abstract class ProcessingBuildingBehaviour : OutputBuildingBehaviour
 {
     protected abstract int MAX_INPUTS { get; set; }
     protected abstract string NAME { get; set; }
@@ -37,9 +37,6 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
     public RecipeScriptableObject[] recipes;
     public RecipeScriptableObject currentRecipe;
     protected float processingUntil = 0f;
-    protected Vector3 outputPos { get; set; }
-    protected LayerMask outputMask;
-    public GameObject itemPrefab;
 
     protected BuildingGUIController GUIController;
     public GameObject buildingGUIPrefab;
@@ -139,8 +136,9 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
     {
         if (Active)
         {
-            if (Output != null && OutputItem())
+            if (Output != null && OutputItem(Output.item))
             {
+                Output = new ItemStack(item: Output.item, amount: (byte)(Output.amount - 1));
                 return;
             }
             if (currentRecipe != null)
@@ -148,13 +146,21 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
                 if (GUIController != null)
                 {
                     GUIController.UpdateProgress(
-                        Mathf.Clamp((currentRecipe.processingTime - (processingUntil - Time.time))
-                            / currentRecipe.processingTime, 0, 1)
+                        Mathf.Clamp(
+                            (currentRecipe.processingTime - (processingUntil - Time.time))
+                                / currentRecipe.processingTime,
+                            0,
+                            1
+                        )
                     );
                 }
                 foreach (var input in currentRecipe.inputs)
                 {
-                    if (Processing.FirstOrDefault(item=>item?.item.type == input.type && item.amount > input.amount) == null)
+                    if (
+                        Processing.FirstOrDefault(
+                            item => item?.item.type == input.type && item.amount > input.amount
+                        ) == null
+                    )
                     {
                         return;
                     }
@@ -206,28 +212,6 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
                 }
             }
         }
-    }
-
-    bool OutputItem()
-    {
-        var hit = Physics2D.OverlapBox(
-            point: outputPos,
-            size: Vector2.one * 0.32f,
-            angle: 0,
-            layerMask: outputMask
-        );
-        if (hit == null)
-        {
-            var item = Instantiate(itemPrefab);
-            item.GetComponent<ItemController>().itemStack = new ItemStack(
-                item: Output.item,
-                amount: 1
-            );
-            item.transform.position = outputPos;
-            Output = new ItemStack(item: Output.item, amount: (byte)(Output.amount - 1));
-            return true;
-        }
-        return false;
     }
 
     public override void Activate()
