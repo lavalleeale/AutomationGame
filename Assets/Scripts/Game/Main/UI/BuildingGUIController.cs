@@ -121,7 +121,7 @@ public class BuildingGUIController : SlotController
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            GameManager.inGUI.Remove(GameManager.GUIType.building);
+            GameManager.openGUIs.Remove(GameManager.GUIType.building);
             Destroy(gameObject);
         }
     }

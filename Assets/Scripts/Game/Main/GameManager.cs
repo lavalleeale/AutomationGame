@@ -10,7 +10,7 @@ using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
-    public static List<GUIType> inGUI = new();
+    public static List<GUIType> openGUIs = new();
     public static ItemStack[] inventoryItems = new ItemStack[13 * 4];
     public GameObject inventoryPrefab,
         canvas;
@@ -22,23 +22,23 @@ public class GameManager : MonoBehaviour
         {
             if (inventory == null)
             {
-                if (!inGUI.Contains(GUIType.menu))
+                if (!openGUIs.Contains(GUIType.menu))
                 {
                     inventory = Instantiate(inventoryPrefab).GetComponent<InventoryController>();
                     inventory.transform.SetParent(canvas.transform, false);
                     inventory.Initialize();
-                    inGUI.Add(GUIType.inventory);
+                    openGUIs.Add(GUIType.inventory);
                 }
             }
             else
             {
-                inGUI.Remove(GUIType.inventory);
+                openGUIs.Remove(GUIType.inventory);
                 Destroy(inventory.gameObject);
             }
         }
         else if (Input.GetKeyDown(KeyCode.Escape) && inventory != null)
         {
-            inGUI.Remove(GUIType.inventory);
+            openGUIs.Remove(GUIType.inventory);
             Destroy(inventory.gameObject);
         }
     }
@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
     {
         inventory,
         building,
-        menu
+        menu,
+        placing
     }
 }

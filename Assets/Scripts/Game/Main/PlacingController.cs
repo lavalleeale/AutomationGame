@@ -23,14 +23,6 @@ public class PlacingController : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.inGUI.Count != 0)
-        {
-            if (placing != null)
-            {
-                Destroy(placing.gameObject);
-            }
-            return;
-        }
         if (placing != null)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -79,8 +71,9 @@ public class PlacingController : MonoBehaviour
                 placing = null;
             }
         }
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B) && GameManager.openGUIs.Count == 0)
         {
+            GameManager.openGUIs.Add(GameManager.GUIType.placing);
             buildingList = Instantiate(listPrefab);
             for (int i = 0; i < buildingPrefabs.Length; i++)
             {
@@ -89,22 +82,16 @@ public class PlacingController : MonoBehaviour
                 building.transform.SetParent(buildingList.transform, false);
             }
             buildingList.transform.SetParent(canvas.transform, false);
+        } else if (Input.GetKeyDown(KeyCode.Escape) && GameManager.openGUIs.Contains(GameManager.GUIType.placing))
+        {
+            GameManager.openGUIs.Remove(GameManager.GUIType.placing);
+            Destroy(buildingList);
         }
-        //else if (Input.GetKeyDown(KeyCode.Alpha6))
-        //{
-        //    if (placing != null)
-        //    {
-        //        Destroy(placing.gameObject);
-        //    }
-
-        //    placing = Instantiate(assemblerPrefab).GetComponent<BuildingBehaviour>();
-        //    placing.transform.rotation = targetPlacementRotation;
-        //    placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
-        //}
     }
 
     public void StartPlacing(GameObject buildingPrefab)
     {
+        GameManager.openGUIs.Remove(GameManager.GUIType.placing);
         Destroy(buildingList);
         placing = Instantiate(buildingPrefab).GetComponent<BuildingBehaviour>();
         placing.transform.rotation = targetPlacementRotation;
