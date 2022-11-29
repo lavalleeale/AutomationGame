@@ -73,13 +73,7 @@ public class PersistenceManager : MonoBehaviour
     {
         if (newScene.name.Equals("Main"))
         {
-            saveMenu = GameObject.Find("Save Menu");
-            saveName = saveMenu.transform.Find("Save Name").GetComponent<TMP_InputField>();
-            saveMenu.transform.Find("Save Button").GetComponent<Button>().onClick.AddListener(Save);
-            saveMenu.SetActive(false);
-            worldGenController = GameObject
-                .Find("GameManager")
-                .GetComponent<WorldGenerationController>();
+            PrepareMain();
             if (toLoad != null)
             {
                 Load(toLoad);
@@ -89,6 +83,17 @@ public class PersistenceManager : MonoBehaviour
                 worldGenController.Initialize(UnityEngine.Random.Range(0, 100000));
             }
         }
+    }
+
+    public void PrepareMain()
+    {
+        saveMenu = GameObject.Find("Save Menu");
+        saveName = saveMenu.transform.Find("Save Name").GetComponent<TMP_InputField>();
+        saveMenu.transform.Find("Save Button").GetComponent<Button>().onClick.AddListener(Save);
+        saveMenu.SetActive(false);
+        worldGenController = GameObject
+            .Find("GameManager")
+            .GetComponent<WorldGenerationController>();
     }
 
     void Save()
@@ -228,6 +233,32 @@ public class PersistenceManager : MonoBehaviour
             Path.Combine(Application.persistentDataPath, saveName)
         );
         var data = MessagePackSerializer.Deserialize<SaveData>(file);
+        StartCoroutine(LoadData(data: data));
+    }
+
+    public IEnumerator LoadData(SaveData data)
+    {
+        WorldGenerationController.oreStrengthOffsets = data.ores.ToDictionary(
+            keySelector: (ore) => new Vector3Int(x: ore.x, y: ore.y),
+            elementSelector: ore => ore.offset
+        );
+
+        worldGenController.knownChunks = data.chunks
+            .Select(i => new Vector3Int(x: i.x, y: i.y))
+            .ToList();
+
+        worldGenController.Initialize(data.seed);
+
+        GameManager.inventoryItems = data.inventory
+            .Select(
+                item =>
+                    item == null
+                        ? null
+                        : new ItemStack(item: item.type.GetItem(), amount: item.amount)
+            )
+            .ToArray();
+        yield return null;
+
         foreach (var buildingData in data.buildings)
         {
             GameObject building;
@@ -323,26 +354,6 @@ public class PersistenceManager : MonoBehaviour
                 amount: itemData.amount
             );
         }
-
-        WorldGenerationController.oreStrengthOffsets = data.ores.ToDictionary(
-            keySelector: (ore) => new Vector3Int(x: ore.x, y: ore.y),
-            elementSelector: ore => ore.offset
-        );
-
-        worldGenController.knownChunks = data.chunks
-            .Select(i => new Vector3Int(x: i.x, y: i.y))
-            .ToList();
-
-        worldGenController.Initialize(data.seed);
-
-        GameManager.inventoryItems = data.inventory
-            .Select(
-                item =>
-                    item == null
-                        ? null
-                        : new ItemStack(item: item.type.GetItem(), amount: item.amount)
-            )
-            .ToArray();
     }
 }
 
