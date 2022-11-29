@@ -2,7 +2,7 @@
 using System.Collections;
 using TMPro;
 
-public class BuildingGUIController : MonoBehaviour
+public class BuildingGUIController : SlotController
 {
     public Canvas canvas;
     public TextMeshProUGUI nameText;
@@ -38,11 +38,11 @@ public class BuildingGUIController : MonoBehaviour
             var slot = Instantiate(slotPrefab);
             slot.transform.SetParent(input.transform);
             inputSlots[i] = slot.GetComponent<Slot>();
-            inputSlots[i].Initialize(SlotType.input, i, this);
+            inputSlots[i].Initialize(SlotController.SlotType.input, i, this);
         }
 
         this.outputSlot = output.GetComponent<Slot>();
-        this.outputSlot.Initialize(SlotType.output, 0, this);
+        this.outputSlot.Initialize(SlotController.SlotType.output, 0, this);
         for (int i = 0; i < recipes.Length; i++)
         {
             var recipeView = Instantiate(recipePrefab);
@@ -64,15 +64,9 @@ public class BuildingGUIController : MonoBehaviour
         building.SetRecipe(recipe);
     }
 
-    public enum SlotType
+    public void SetSlot(SlotController.SlotType slotType, int slotNum, ItemStack itemStack)
     {
-        input,
-        output
-    }
-
-    public void SetSlot(SlotType slotType, int slotNum, ItemStack itemStack)
-    {
-        if (slotType == SlotType.input)
+        if (slotType == SlotController.SlotType.input)
         {
             if (inputSlots[slotNum].Child)
             {
@@ -101,10 +95,24 @@ public class BuildingGUIController : MonoBehaviour
         }
     }
 
+    public override bool DragToSlot(
+        ItemStack itemStack,
+        SlotController.SlotType slotType,
+        int slotNum
+    )
+    {
+        return building.InputToSlot(itemStack, slotType, slotNum);
+    }
+
+    public override void DragFromSlot(SlotController.SlotType type, int slotNum)
+    {
+        building.RemoveFromSlot(type, slotNum);
+    }
+
     public void UpdateProgress(float amount)
     {
         processingForeground.offsetMax = new Vector2(
-            -(1 - amount) * 190,
+            (amount - 1) * 190,
             processingForeground.offsetMax.y
         );
     }
@@ -113,7 +121,7 @@ public class BuildingGUIController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            GameManager.inGUI = false;
+            GameManager.inGUI.Remove(GameManager.GUIType.building);
             Destroy(gameObject);
         }
     }

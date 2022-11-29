@@ -37,6 +37,8 @@ public class Item
 
     public static readonly Item COPPER_WIRE = new("Copper Wire", Type.copper_wire, "copper_wire");
 
+    public static readonly Item PCB = new("PCB", Type.pcb, "pcb");
+
     public enum Type : byte
     {
         coal,
@@ -47,7 +49,8 @@ public class Item
         iron_plate,
         iron_cable,
         copper_plate,
-        copper_wire
+        copper_wire,
+        pcb
     }
 }
 

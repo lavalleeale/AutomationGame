@@ -24,11 +24,11 @@ public class PlacingController : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.inGUI)
+        if (GameManager.inGUI.Count != 0)
         {
             if (placing != null)
             {
-                Destroy(placing);
+                Destroy(placing.gameObject);
             }
             return;
         }

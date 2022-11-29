@@ -92,6 +92,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
+  itemPrefab: {fileID: 5652196610731178629, guid: 8306a53ed20e14c9f9cdb689da7082d0, type: 3}
+  cg: {fileID: 831594527018508556}
+  amount: {fileID: 192114628005074947}
+  image: {fileID: 831594527018508563}
+  CanDrag: 1
 --- !u!225 &831594527018508556
 CanvasGroup:
   m_ObjectHideFlags: 0

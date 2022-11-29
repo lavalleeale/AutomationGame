@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class Slot : MonoBehaviour, IDropHandler
 {
-    BuildingGUIController controller;
-    BuildingGUIController.SlotType slotType;
+    SlotController controller;
+    SlotController.SlotType slotType;
     int slotNum;
 
     public GameObject Child
@@ -23,19 +23,20 @@ public class Slot : MonoBehaviour, IDropHandler
         set { value.transform.SetParent(transform, false); }
     }
 
+    public void Remove()
+    {
+        controller.DragFromSlot(slotType, slotNum);
+    }
+
     public void OnDrop(PointerEventData eventData)
     {
-        if (!Child)
+        if (!Child && controller.DragToSlot(UIItem.itemBeingDragged.itemStack, slotType, slotNum))
         {
-            Child = UIItem.itemBeingDragged;
+            Child = UIItem.itemBeingDragged.gameObject;
         }
     }
 
-    public void Initialize(
-        BuildingGUIController.SlotType slotType,
-        int slotNum,
-        BuildingGUIController controller
-    )
+    public void Initialize(SlotController.SlotType slotType, int slotNum, SlotController controller)
     {
         this.slotType = slotType;
         this.slotNum = slotNum;

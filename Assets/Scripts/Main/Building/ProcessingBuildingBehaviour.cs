@@ -5,6 +5,7 @@ using System;
 using System.Collections.Specialized;
 using System.Linq;
 using UnityEngine.EventSystems;
+using static BuildingGUIController;
 
 public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
 {
@@ -18,7 +19,7 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
         get { return output; }
         set
         {
-            if (value.amount == 0)
+            if (value == null || value.amount == 0)
             {
                 output = null;
             }
@@ -28,7 +29,7 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
             }
             if (GUIController != null)
             {
-                GUIController.SetSlot(BuildingGUIController.SlotType.output, 0, output);
+                GUIController.SetSlot(SlotController.SlotType.output, 0, output);
             }
         }
     }
@@ -71,17 +72,15 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
                     }
                 }
             }
-            foreach (RecipeScriptableObject.RecipeItem input in currentRecipe.inputs)
+            var firstNull = Processing.IndexOf(null);
+            if (firstNull != -1)
             {
-                if (input.type == itemStack.item.type)
+                foreach (RecipeScriptableObject.RecipeItem input in currentRecipe.inputs)
                 {
-                    for (int i = 0; i < Processing.Count; i++)
+                    if (input.type == itemStack.item.type)
                     {
-                        if (Processing[i] == null)
-                        {
-                            Processing[i] = itemStack;
-                            return true;
-                        }
+                        Processing[firstNull] = itemStack;
+                        return true;
                     }
                 }
             }
@@ -89,10 +88,61 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
         return false;
     }
 
+    public bool InputToSlot(ItemStack itemStack, SlotController.SlotType slotType, int slotNum)
+    {
+        if (currentRecipe)
+        {
+            if (slotType == SlotController.SlotType.input)
+            {
+                // If target slot is empty and processing does not already contain item and current recipe contains item
+                if (
+                    Processing[slotNum] == null
+                    && Processing.FirstOrDefault(item => item?.item.type == itemStack.item.type)
+                        == null
+                    && currentRecipe.inputs.FirstOrDefault(
+                        input => input.type == itemStack.item.type
+                    ) != null
+                )
+                {
+                    Processing[slotNum] = itemStack;
+                }
+                else if (
+                    Processing[slotNum].item.type == itemStack.item.type
+                    && Processing[slotNum].amount + itemStack.amount < ItemStack.MAX_ITEMS
+                )
+                {
+                    Processing[slotNum] = new ItemStack(
+                        item: itemStack.item,
+                        amount: (byte)(Processing[slotNum].amount + itemStack.amount)
+                    );
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public void RemoveFromSlot(SlotController.SlotType type, int slotNum)
+    {
+        if (type == SlotController.SlotType.input)
+        {
+            Processing[slotNum] = null;
+        }
+        else
+        {
+            Output = null;
+        }
+    }
+
     private void Update()
     {
         if (Active)
         {
+            if (Output != null && OutputItem())
+            {
+                return;
+            }
             if (currentRecipe != null)
             {
                 for (int i = 0; i < currentRecipe.inputs.Length; i++)
@@ -116,13 +166,7 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
                         )
                     )
                     {
-                        OutputItem();
                         return;
-                    }
-
-                    if (GUIController != null)
-                    {
-                        GUIController.UpdateProgress(0);
                     }
 
                     if (Output == null)
@@ -149,25 +193,25 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
                         );
                     }
                 }
-                else
+                if (GUIController != null)
                 {
-                    if (Output != null)
-                    {
-                        OutputItem();
-                    }
-                    if (GUIController != null)
-                    {
-                        GUIController.UpdateProgress(
-                            (currentRecipe.processingTime - (processingUntil - Time.time))
-                                / currentRecipe.processingTime
-                        );
-                    }
+                    GUIController.UpdateProgress(
+                        (currentRecipe.processingTime - (processingUntil - Time.time))
+                            / currentRecipe.processingTime
+                    );
+                }
+            }
+            else
+            {
+                if (GUIController != null)
+                {
+                    GUIController.UpdateProgress(0);
                 }
             }
         }
     }
 
-    void OutputItem()
+    bool OutputItem()
     {
         var hit = Physics2D.OverlapBox(
             point: outputPos,
@@ -184,7 +228,9 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
             );
             item.transform.position = outputPos;
             Output = new ItemStack(item: Output.item, amount: (byte)(Output.amount - 1));
+            return true;
         }
+        return false;
     }
 
     public override void Activate()
@@ -201,6 +247,10 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
 
     private void HandleInputChange(object sender, NotifyCollectionChangedEventArgs e)
     {
+        if (Processing[e.NewStartingIndex] == null)
+        {
+            processingUntil = Time.time + currentRecipe.processingTime;
+        }
         if (e.NewItems[0] != null && ((ItemStack)e.NewItems[0]).amount == 0)
         {
             Processing[e.NewStartingIndex] = null;
@@ -209,7 +259,7 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
         if (GUIController != null)
         {
             GUIController.SetSlot(
-                BuildingGUIController.SlotType.input,
+                SlotController.SlotType.input,
                 e.NewStartingIndex,
                 (ItemStack)e.NewItems[0]
             );
@@ -218,17 +268,24 @@ public abstract class ProcessingBuildingBehaviour : BuildingBehaviour
 
     private void OnMouseDown()
     {
-        if (Active && GUIController == null && !GameManager.inGUI)
+        if (
+            Active
+            && GUIController == null
+            && !(
+                GameManager.inGUI.Contains(GameManager.GUIType.menu)
+                || GameManager.inGUI.Contains(GameManager.GUIType.building)
+            )
+        )
         {
-            GameManager.inGUI = true;
+            GameManager.inGUI.Add(GameManager.GUIType.building);
             var buildGUI = Instantiate(buildingGUIPrefab);
             GUIController = buildGUI.GetComponent<BuildingGUIController>();
             GUIController.Initialize(NAME, MAX_INPUTS, true, this, recipes);
             for (int i = 0; i < MAX_INPUTS; i++)
             {
-                GUIController.SetSlot(BuildingGUIController.SlotType.input, i, Processing[0]);
+                GUIController.SetSlot(SlotController.SlotType.input, i, Processing[0]);
             }
-            GUIController.SetSlot(BuildingGUIController.SlotType.output, 0, Output);
+            GUIController.SetSlot(SlotController.SlotType.output, 0, Output);
         }
     }
 }

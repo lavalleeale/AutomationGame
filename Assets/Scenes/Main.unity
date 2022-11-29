@@ -651,6 +651,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb8e8307b673a40de9385ce8262e2908, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventoryPrefab: {fileID: 2324809933084713599, guid: db48bdb3910bf40b2aac98b1019b9b9e, type: 3}
+  canvas: {fileID: 1152291199}
 --- !u!4 &690345804
 Transform:
   m_ObjectHideFlags: 0

@@ -174,6 +174,7 @@ public class WorldGenerationController : MonoBehaviour
             pos.y / 64f + seed + 1000000 * (int)type
         );
 
+# if !UNITY_EDITOR
         if (oreStrengthOffsets.TryGetValue(pos, out int value))
         {
             return (int)(1_000_000_000 * (strength - 0.9f) + 10_000) - value;
@@ -182,5 +183,15 @@ public class WorldGenerationController : MonoBehaviour
         {
             return (int)(1_000_000_000 * (strength - 0.9f) + 10_000);
         }
+#else
+        if (oreStrengthOffsets.TryGetValue(pos, out int value))
+        {
+            return (int)(1_000_000_000 * (strength - 0.5f) + 10_000) - value;
+        }
+        else
+        {
+            return (int)(1_000_000_000 * (strength - 0.5f) + 10_000);
+        }
+#endif
     }
 }

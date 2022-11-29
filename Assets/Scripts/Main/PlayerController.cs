@@ -5,41 +5,36 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 100;
-    bool showingOverview;
-    float oldSize;
+
+    //bool showingOverview;
+    //float oldSize;
     public Camera cam;
     public Grid grid;
     public Rigidbody2D rb;
     public WorldGenerationController worldGenController;
 
-    //public ItemStack[] inventory = new ItemStack[27];
-
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            showingOverview = !showingOverview;
-            if (showingOverview)
-            {
-                oldSize = cam.orthographicSize;
-            }
-            else
-            {
-                cam.orthographicSize = oldSize;
-            }
-        }
-        if (showingOverview)
-        {
-            cam.orthographicSize = 200f;
-        }
-        else
-        {
-            cam.orthographicSize = Mathf.Clamp(
-                cam.orthographicSize - Input.mouseScrollDelta.y,
-                1f,
-                7f
-            );
-        }
+        //if (Input.GetKeyDown(KeyCode.M))
+        //{
+        //    showingOverview = !showingOverview;
+        //    if (showingOverview)
+        //    {
+        //        oldSize = cam.orthographicSize;
+        //    }
+        //    else
+        //    {
+        //        cam.orthographicSize = oldSize;
+        //    }
+        //}
+        //if (showingOverview)
+        //{
+        //    cam.orthographicSize = 200f;
+        //}
+        //else
+        //{
+        cam.orthographicSize = Mathf.Clamp(cam.orthographicSize - Input.mouseScrollDelta.y, 1f, 7f);
+        //}
         worldGenController.LookAtCell(grid.WorldToCell(transform.position));
     }
 

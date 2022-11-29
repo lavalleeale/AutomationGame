@@ -15,25 +15,34 @@ public class MenuController : MonoBehaviour
 
     public void HideSaveMenu()
     {
-        GameManager.inGUI = false;
+        GameManager.inGUI.Remove(GameManager.GUIType.menu);
         saveMenu.SetActive(false);
         Time.timeScale = 1;
     }
 
     public void Return()
     {
-        GameManager.inGUI = false;
+        GameManager.inGUI.Remove(GameManager.GUIType.menu);
         Time.timeScale = 1;
         mainMenu.SetActive(false);
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P) && !GameManager.inGUI)
+        if (Input.GetKeyDown(KeyCode.P) && GameManager.inGUI.Count == 0)
         {
-            GameManager.inGUI = true;
+            GameManager.inGUI.Add(GameManager.GUIType.menu);
             Time.timeScale = 0;
             mainMenu.SetActive(true);
+        }
+        else if (
+            Input.GetKeyDown(KeyCode.Escape) && GameManager.inGUI.Contains(GameManager.GUIType.menu)
+        )
+        {
+            GameManager.inGUI.Remove(GameManager.GUIType.menu);
+            Time.timeScale = 1;
+            mainMenu.SetActive(false);
+            saveMenu.SetActive(false);
         }
     }
 }

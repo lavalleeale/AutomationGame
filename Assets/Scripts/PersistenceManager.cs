@@ -109,7 +109,15 @@ public class PersistenceManager : MonoBehaviour
             ores: WorldGenerationController.oreStrengthOffsets
                 .Select((ore) => new SavedOre(pos: ore.Key, offset: ore.Value))
                 .ToArray(),
-            seed: WorldGenerationController.seed
+            seed: WorldGenerationController.seed,
+            inventory: GameManager.inventoryItems
+                .Select(
+                    item =>
+                        item == null
+                            ? null
+                            : new SavedItemStack(type: item.item.type, amount: item.amount)
+                )
+                .ToArray()
         );
 
         for (int i = 0; i < furnaces.Length; i++)
@@ -326,6 +334,15 @@ public class PersistenceManager : MonoBehaviour
             .ToList();
 
         worldGenController.Initialize(data.seed);
+
+        GameManager.inventoryItems = data.inventory
+            .Select(
+                item =>
+                    item == null
+                        ? null
+                        : new ItemStack(item: item.type.GetItem(), amount: item.amount)
+            )
+            .ToArray();
     }
 }
 
@@ -350,13 +367,17 @@ public class SaveData
     [Key(5)]
     public int seed;
 
+    [Key(6)]
+    public SavedItemStack[] inventory;
+
     public SaveData(
         SavedBuilding[] buildings,
         SavedProcessingBuilding[] processingBuildings,
         SavedWorldItemStack[] items,
         LoadedChunk[] chunks,
         SavedOre[] ores,
-        int seed
+        int seed,
+        SavedItemStack[] inventory
     )
     {
         this.buildings = buildings;
@@ -365,6 +386,7 @@ public class SaveData
         this.chunks = chunks;
         this.ores = ores;
         this.seed = seed;
+        this.inventory = inventory;
     }
 }
 
