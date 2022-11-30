@@ -5,7 +5,10 @@ using UnityEngine;
 public class PlacingController : MonoBehaviour
 {
     public Grid grid;
-    public GameObject canvas, listPrefab, UIBuildingPrefab, UIBuildingSlotPrefab;
+    public GameObject canvas,
+        listPrefab,
+        UIBuildingPrefab,
+        UIBuildingSlotPrefab;
     public GameObject[] buildingPrefabs;
 
     GameObject buildingList;
@@ -77,7 +80,8 @@ public class PlacingController : MonoBehaviour
             buildingList = Instantiate(listPrefab);
             for (int i = 0; i < buildingPrefabs.Length; i++)
             {
-                var slot = Instantiate(UIBuildingSlotPrefab).GetComponent<UIBuildingSlotController>();
+                var slot = Instantiate(UIBuildingSlotPrefab)
+                    .GetComponent<UIBuildingSlotController>();
                 slot.displayText = buildingPrefabs[i].name;
                 var building = Instantiate(UIBuildingPrefab).GetComponent<UIBuildingController>();
                 building.Initialize(buildingPrefabs[i], this);
@@ -85,7 +89,11 @@ public class PlacingController : MonoBehaviour
                 building.transform.SetParent(slot.transform, false);
             }
             buildingList.transform.SetParent(canvas.transform, false);
-        } else if (Input.GetKeyDown(KeyCode.Escape) && GameManager.openGUIs.Contains(GameManager.GUIType.placing))
+        }
+        else if (
+            Input.GetKeyDown(KeyCode.Escape)
+            && GameManager.openGUIs.Contains(GameManager.GUIType.placing)
+        )
         {
             GameManager.openGUIs.Remove(GameManager.GUIType.placing);
             Destroy(buildingList);

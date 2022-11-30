@@ -36,7 +36,8 @@ public class MenuController : MonoBehaviour
             mainMenu.SetActive(true);
         }
         else if (
-            Input.GetKeyDown(KeyCode.Escape) && GameManager.openGUIs.Contains(GameManager.GUIType.menu)
+            Input.GetKeyDown(KeyCode.Escape)
+            && GameManager.openGUIs.Contains(GameManager.GUIType.menu)
         )
         {
             GameManager.openGUIs.Remove(GameManager.GUIType.menu);

@@ -24,7 +24,8 @@ public class UIBuildingController : MonoBehaviour, IDragHandler, IBeginDragHandl
 
     public void OnClick()
     {
-        if (!beingDragged) placingController.StartPlacing(buildingPrefab);
+        if (!beingDragged)
+            placingController.StartPlacing(buildingPrefab);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -53,4 +54,3 @@ public class UIBuildingController : MonoBehaviour, IDragHandler, IBeginDragHandl
         }
     }
 }
-

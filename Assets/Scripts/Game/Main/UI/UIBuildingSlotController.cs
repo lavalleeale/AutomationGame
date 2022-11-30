@@ -36,4 +36,3 @@ public class UIBuildingSlotController : MonoBehaviour, IDropHandler
         }
     }
 }
-
