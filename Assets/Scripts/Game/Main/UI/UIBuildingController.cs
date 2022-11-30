@@ -1,26 +1,56 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System.Collections;
 using TMPro;
 
-public class UIBuildingController : MonoBehaviour
+public class UIBuildingController : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     GameObject buildingPrefab;
     PlacingController placingController;
     public Image image;
-    public TextMeshProUGUI nameText;
+    public CanvasGroup cg;
+    public static UIBuildingController buildingBeingDragged;
+
+    bool beingDragged;
+    Transform previousParent;
 
     public void Initialize(GameObject buildingPrefab, PlacingController placingController)
     {
         this.buildingPrefab = buildingPrefab;
         image.sprite = buildingPrefab.GetComponent<SpriteRenderer>().sprite;
-        nameText.text = buildingPrefab.name;
         this.placingController = placingController;
     }
 
     public void OnClick()
     {
-        placingController.StartPlacing(buildingPrefab);
+        if (!beingDragged) placingController.StartPlacing(buildingPrefab);
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        transform.position = Input.mousePosition;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        cg.blocksRaycasts = false;
+        previousParent = transform.parent;
+        buildingBeingDragged = this;
+        beingDragged = true;
+        var newObject = Instantiate(gameObject);
+        newObject.transform.SetParent(transform.parent, false);
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        beingDragged = false;
+        cg.blocksRaycasts = true;
+        buildingBeingDragged = null;
+        if (transform.parent == previousParent)
+        {
+            Destroy(gameObject);
+        }
     }
 }
 

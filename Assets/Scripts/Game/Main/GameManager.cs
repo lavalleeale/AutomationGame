@@ -11,7 +11,7 @@ using Unity.VisualScripting;
 public class GameManager : MonoBehaviour
 {
     public static List<GUIType> openGUIs = new();
-    public static ItemStack[] inventoryItems = new ItemStack[13 * 4];
+    public static ItemStack[] inventoryItems = new ItemStack[10 * 5];
     public GameObject inventoryPrefab,
         canvas;
     InventoryController inventory;
