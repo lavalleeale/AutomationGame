@@ -43,11 +43,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public enum GUIType
+    public static bool OnlyOpen(GUIType type)
     {
-        inventory,
-        building,
-        menu,
-        placing
+        return openGUIs.Count == 0 || (openGUIs.Count == 1 && openGUIs.Contains(type));
     }
+
+    public static bool AnyOpen(params GUIType[] types)
+    {
+        foreach (var type in types)
+        {
+            if (openGUIs.Contains(type))
+            {
+                return true;
+            }
+        }
+        return false;
+    }   
+}
+
+public enum GUIType
+{
+    inventory,
+    building,
+    menu,
+    placing
 }

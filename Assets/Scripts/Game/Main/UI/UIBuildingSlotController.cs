@@ -3,12 +3,12 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using TMPro;
 
-public class UIBuildingSlotController : MonoBehaviour, IDropHandler
+public class UIBuildingSlotController : MonoBehaviour
 {
     public TextMeshProUGUI display;
     public string displayText;
 
-    public GameObject Child
+    public virtual GameObject Child
     {
         get
         {
@@ -18,21 +18,13 @@ public class UIBuildingSlotController : MonoBehaviour, IDropHandler
             }
             return null;
         }
-        set { value.transform.SetParent(transform, false); }
+        set {
+            value.transform.SetParent(transform, false);
+        }
     }
 
     void Start()
     {
         display.text = displayText;
-    }
-
-    public void OnDrop(PointerEventData eventData)
-    {
-        if (Child == null)
-        {
-            Child = UIBuildingController.buildingBeingDragged.gameObject;
-            Child.GetComponent<RectTransform>().offsetMin = new Vector2(10, 10);
-            Child.GetComponent<RectTransform>().offsetMax = new Vector2(-10, -10);
-        }
     }
 }

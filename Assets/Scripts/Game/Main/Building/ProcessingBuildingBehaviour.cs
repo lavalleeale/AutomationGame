@@ -252,13 +252,10 @@ public abstract class ProcessingBuildingBehaviour : OutputBuildingBehaviour
         if (
             Active
             && GUIController == null
-            && !(
-                GameManager.openGUIs.Contains(GameManager.GUIType.menu)
-                || GameManager.openGUIs.Contains(GameManager.GUIType.building)
-            )
+            && GameManager.OnlyOpen(GUIType.inventory)
         )
         {
-            GameManager.openGUIs.Add(GameManager.GUIType.building);
+            GameManager.openGUIs.Add(GUIType.building);
             var buildGUI = Instantiate(buildingGUIPrefab);
             GUIController = buildGUI.GetComponent<BuildingGUIController>();
             GUIController.Initialize(NAME, MAX_INPUTS, true, this, recipes);

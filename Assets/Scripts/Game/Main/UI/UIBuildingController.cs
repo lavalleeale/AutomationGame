@@ -6,7 +6,7 @@ using TMPro;
 
 public class UIBuildingController : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
-    GameObject buildingPrefab;
+    public GameObject buildingPrefab;
     PlacingController placingController;
     public Image image;
     public CanvasGroup cg;

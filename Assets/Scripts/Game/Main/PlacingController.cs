@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class PlacingController : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class PlacingController : MonoBehaviour
     LayerMask itemsMask;
     LayerMask buildingsMask;
 
+    public static GameObject[] FavoritesList = new GameObject[10];
+
     void Start()
     {
         itemsMask = LayerMask.GetMask("items");
@@ -28,7 +31,7 @@ public class PlacingController : MonoBehaviour
     {
         if (placing != null)
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape) || !GameManager.OnlyOpen(GUIType.inventory))
             {
                 Destroy(placing.gameObject);
                 placing = null;
@@ -74,9 +77,22 @@ public class PlacingController : MonoBehaviour
                 placing = null;
             }
         }
+        for (int i = (int)KeyCode.Alpha0; i < (int)KeyCode.Alpha9; i++)
+        {
+            if (Input.GetKeyDown((KeyCode)i))
+            {
+                if (placing != null)
+                {
+                    Destroy(placing.gameObject);
+                }
+                placing = Instantiate(FavoritesList[i - (int)KeyCode.Alpha0]).GetComponent<BuildingBehaviour>();
+                placing.transform.rotation = targetPlacementRotation;
+                placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
+            }
+        }
         if (Input.GetKeyDown(KeyCode.B) && GameManager.openGUIs.Count == 0)
         {
-            GameManager.openGUIs.Add(GameManager.GUIType.placing);
+            GameManager.openGUIs.Add(GUIType.placing);
             buildingList = Instantiate(listPrefab);
             for (int i = 0; i < buildingPrefabs.Length; i++)
             {
@@ -92,17 +108,17 @@ public class PlacingController : MonoBehaviour
         }
         else if (
             Input.GetKeyDown(KeyCode.Escape)
-            && GameManager.openGUIs.Contains(GameManager.GUIType.placing)
+            && GameManager.openGUIs.Contains(GUIType.placing)
         )
         {
-            GameManager.openGUIs.Remove(GameManager.GUIType.placing);
+            GameManager.openGUIs.Remove(GUIType.placing);
             Destroy(buildingList);
         }
     }
 
     public void StartPlacing(GameObject buildingPrefab)
     {
-        GameManager.openGUIs.Remove(GameManager.GUIType.placing);
+        GameManager.openGUIs.Remove(GUIType.placing);
         Destroy(buildingList);
         placing = Instantiate(buildingPrefab).GetComponent<BuildingBehaviour>();
         placing.transform.rotation = targetPlacementRotation;
