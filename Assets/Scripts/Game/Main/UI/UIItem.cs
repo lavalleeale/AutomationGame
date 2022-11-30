@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
-public class UIItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class UIItem : MonoBehaviour
 {
     public ItemStack itemStack;
     public GameObject canvas,
@@ -13,43 +13,34 @@ public class UIItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     public CanvasGroup cg;
     public TextMeshProUGUI amount;
     public Image image;
-    Vector3 startPos;
     public static UIItem itemBeingDragged;
     public bool CanDrag = true;
+    public bool isBeingDragged = false;
 
-    public void OnBeginDrag(PointerEventData eventData)
+    public void OnClick()
     {
         if (CanDrag)
         {
             var slot = transform.parent.GetComponent<Slot>();
-            startPos = transform.position;
+            slot.Remove();
+            if (UIItem.itemBeingDragged != null)
+            {
+                if (slot.Add())
+                {
+                    UIItem.itemBeingDragged.isBeingDragged = false;
+                    UIItem.itemBeingDragged.cg.blocksRaycasts = true;
+                    slot.Child = UIItem.itemBeingDragged.gameObject;
+                }
+                else
+                {
+                    slot.Add();
+                    return;
+                }
+            }
+            isBeingDragged = true;
             itemBeingDragged = this;
             cg.blocksRaycasts = false;
             transform.SetParent(canvas.transform);
-            slot.Remove();
-        }
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        if (CanDrag)
-        {
-            transform.position = Input.mousePosition;
-        }
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        if (transform.parent.CompareTag("canvas"))
-        {
-            var item = Instantiate(itemPrefab);
-            item.GetComponent<ItemController>().itemStack = itemStack;
-            item.transform.position = Camera.main.transform.position + new Vector3(0, 0, 4);
-            Destroy(gameObject);
-        }
-        if (CanDrag)
-        {
-            cg.blocksRaycasts = true;
         }
     }
 
@@ -59,5 +50,29 @@ public class UIItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         canvas = GameObject.FindGameObjectWithTag("canvas");
         amount.text = itemStack.amount.ToString();
         image.sprite = itemStack.item.sprite;
+    }
+
+    private void Update()
+    {
+        if (itemBeingDragged == this)
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                Invoke(nameof(Drop), 0.2f);
+            }
+            transform.position = Input.mousePosition;
+        }
+    }
+
+    private void Drop()
+    {
+        if (itemBeingDragged == this)
+        {
+            itemBeingDragged = null;
+            var item = Instantiate(itemPrefab);
+            item.GetComponent<ItemController>().itemStack = itemStack;
+            item.transform.position = Camera.main.transform.position + new Vector3(0, 0, 4);
+            Destroy(gameObject);
+        }
     }
 }

@@ -63,7 +63,7 @@ public class MinerController : OutputBuildingBehaviour
         FindOres();
         var itemOffset =
             Quaternion.AngleAxis(transform.localRotation.eulerAngles.z, Vector3.forward)
-            * new Vector3(x: 0, y: -0.64f, z: 0);
+            * new Vector3(x: 0.64f, y: 0, z: 0);
         outputPos = transform.position + itemOffset;
     }
 

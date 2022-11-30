@@ -50,16 +50,16 @@ public class LoadTest
         var data = new SaveData(
             buildings: new SavedBuilding[]
             {
-                new SavedBuilding(type: SavedBuilding.Type.miner, 1, new Vector3Int(-4, 0)),
-                new SavedBuilding(type: SavedBuilding.Type.conveyor, 1, new Vector3Int(-3, 0)),
-                new SavedBuilding(type: SavedBuilding.Type.conveyor, 1, new Vector3Int(0, 0)),
-                new SavedBuilding(type: SavedBuilding.Type.conveyor, 1, new Vector3Int(3, 0)),
-                new SavedBuilding(type: SavedBuilding.Type.miner, 0, new Vector3Int(3, 10)),
-                new SavedBuilding(type: SavedBuilding.Type.conveyor, 0, new Vector3Int(3, 9)),
-                new SavedBuilding(type: SavedBuilding.Type.conveyor, 0, new Vector3Int(3, 6)),
-                new SavedBuilding(type: SavedBuilding.Type.conveyor, 0, new Vector3Int(3, 3)),
-                new SavedBuilding(type: SavedBuilding.Type.conveyor, 0, new Vector3Int(3, 2)),
-                new SavedBuilding(type: SavedBuilding.Type.conveyor, 1, new Vector3Int(3, 1)),
+                new SavedBuilding(type: SavedBuilding.Type.miner, 0, new Vector3Int(-4, 0)),
+                new SavedBuilding(type: SavedBuilding.Type.conveyor, 0, new Vector3Int(-3, 0)),
+                new SavedBuilding(type: SavedBuilding.Type.conveyor, 0, new Vector3Int(0, 0)),
+                new SavedBuilding(type: SavedBuilding.Type.conveyor, 0, new Vector3Int(3, 0)),
+                new SavedBuilding(type: SavedBuilding.Type.miner, 3, new Vector3Int(3, 10)),
+                new SavedBuilding(type: SavedBuilding.Type.conveyor, 3, new Vector3Int(3, 9)),
+                new SavedBuilding(type: SavedBuilding.Type.conveyor, 3, new Vector3Int(3, 6)),
+                new SavedBuilding(type: SavedBuilding.Type.conveyor, 3, new Vector3Int(3, 3)),
+                new SavedBuilding(type: SavedBuilding.Type.conveyor, 3, new Vector3Int(3, 2)),
+                new SavedBuilding(type: SavedBuilding.Type.conveyor, 0, new Vector3Int(3, 1)),
             },
             processingBuildings: new SavedProcessingBuilding[]
             {
