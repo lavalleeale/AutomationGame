@@ -15,26 +15,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.M))
-        //{
-        //    showingOverview = !showingOverview;
-        //    if (showingOverview)
-        //    {
-        //        oldSize = cam.orthographicSize;
-        //    }
-        //    else
-        //    {
-        //        cam.orthographicSize = oldSize;
-        //    }
-        //}
-        //if (showingOverview)
-        //{
-        //    cam.orthographicSize = 200f;
-        //}
-        //else
-        //{
         cam.orthographicSize = Mathf.Clamp(cam.orthographicSize - Input.mouseScrollDelta.y, 1f, 7f);
-        //}
         worldGenController.LookAtCell(grid.WorldToCell(transform.position));
     }
 

@@ -48,7 +48,7 @@ public class MinerController : OutputBuildingBehaviour
             WorldGenerationController.oreStrengthOffsets.GetValueOrDefault(pos);
         foreach (OreController.Type oreType in Enum.GetValues(typeof(OreController.Type)))
         {
-            var strength = WorldGenerationController.GetOreStrength(pos, oreType);
+            var strength = WorldGenerationController.GetOffsettedOreStrength(pos, oreType);
             if (strength > 0)
             {
                 oreData.Add(new OreData(pos: pos, type: oreType, amount: strength));

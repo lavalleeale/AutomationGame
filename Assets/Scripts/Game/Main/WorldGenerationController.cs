@@ -7,9 +7,9 @@ public class WorldGenerationController : MonoBehaviour
 {
     public List<Vector3Int> knownChunks = new();
     public Vector3Int lastPos;
-    public OreController[,,] oreControllers = new OreController[3, 3, 1024];
-    public int[] oreControllersRowIndices = new int[] { 0, 1, 2 };
-    public int[] oreControllersColIndices = new int[] { 0, 1, 2 };
+    public OreController[,,] oreControllers = new OreController[9, 9, 1024];
+    int[] oreControllersRowIndices = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+    int[] oreControllersColIndices = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
     public GameObject orePrefab,
         ores,
         groundPrefab;
@@ -30,56 +30,56 @@ public class WorldGenerationController : MonoBehaviour
             switch (cell.x - lastPos.x, cell.y - lastPos.y)
             {
                 case (0, 1):
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < 9; i++)
                     {
-                        oreControllersRowIndices[i] = (oreControllersRowIndices[i] + 1) % 3;
+                        oreControllersRowIndices[i] = (oreControllersRowIndices[i] + 1) % 9;
                     }
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < 9; i++)
                     {
                         Generate(
-                            gridPos: cell + new Vector3Int(x: i - 1, y: 1),
+                            gridPos: cell + new Vector3Int(x: i - 4, y: 1),
                             x: oreControllersColIndices[i],
-                            y: oreControllersRowIndices[2]
+                            y: oreControllersRowIndices[8]
                         );
                     }
                     break;
                 case (0, -1):
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < 9; i++)
                     {
-                        oreControllersRowIndices[i] = (oreControllersRowIndices[i] + 2) % 3;
+                        oreControllersRowIndices[i] = (oreControllersRowIndices[i] + 2) % 9;
                     }
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < 9; i++)
                     {
                         Generate(
-                            gridPos: cell + new Vector3Int(x: i - 1, y: -1),
+                            gridPos: cell + new Vector3Int(x: i - 4, y: -1),
                             x: oreControllersColIndices[i],
                             y: oreControllersRowIndices[0]
                         );
                     }
                     break;
                 case (1, 0):
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < 9; i++)
                     {
-                        oreControllersColIndices[i] = (oreControllersColIndices[i] + 1) % 3;
+                        oreControllersColIndices[i] = (oreControllersColIndices[i] + 1) % 9;
                     }
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < 9; i++)
                     {
                         Generate(
-                            gridPos: cell + new Vector3Int(x: 1, y: i - 1),
-                            x: oreControllersColIndices[2],
+                            gridPos: cell + new Vector3Int(x: 1, y: i - 4),
+                            x: oreControllersColIndices[8],
                             y: oreControllersRowIndices[i]
                         );
                     }
                     break;
                 case (-1, 0):
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < 9; i++)
                     {
-                        oreControllersColIndices[i] = (oreControllersColIndices[i] + 2) % 3;
+                        oreControllersColIndices[i] = (oreControllersColIndices[i] + 2) % 9;
                     }
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < 9; i++)
                     {
                         Generate(
-                            gridPos: cell + new Vector3Int(x: -1, y: i - 1),
+                            gridPos: cell + new Vector3Int(x: -1, y: i - 4),
                             x: oreControllersColIndices[0],
                             y: oreControllersRowIndices[i]
                         );
@@ -87,12 +87,12 @@ public class WorldGenerationController : MonoBehaviour
                     break;
                 default:
                     Debug.Log("regen");
-                    for (int i = 0; i < 9; i++)
+                    for (int i = 0; i < 81; i++)
                     {
                         Generate(
-                            gridPos: cell + new Vector3Int(x: i % 3 - 1, y: i / 3 - 1),
-                            x: oreControllersColIndices[i % 3],
-                            y: oreControllersRowIndices[i / 3]
+                            gridPos: cell + new Vector3Int(x: i % 9 - 4, y: i / 9 - 4),
+                            x: oreControllersColIndices[i % 9],
+                            y: oreControllersRowIndices[i / 9]
                         );
                     }
                     break;
@@ -103,9 +103,9 @@ public class WorldGenerationController : MonoBehaviour
 
     public void Initialize(int seed)
     {
-        for (int y = 0; y < 3; y++)
+        for (int y = 0; y < 9; y++)
         {
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < 9; x++)
             {
                 for (int i = 0; i < 1024; i++)
                 {
@@ -123,11 +123,11 @@ public class WorldGenerationController : MonoBehaviour
             ground.transform.position = chunkGrid.CellToWorld(knownChunks[i]);
         }
 
-        for (int r = 0; r < 3; r++)
+        for (int r = 0; r < 9; r++)
         {
-            for (int c = 0; c < 3; c++)
+            for (int c = 0; c < 9; c++)
             {
-                Vector3Int cellPos = new Vector3Int(x: c - 1, y: r - 1);
+                Vector3Int cellPos = new Vector3Int(x: c - 4, y: r - 4);
                 Generate(gridPos: cellPos, x: c, y: r);
             }
         }
@@ -174,24 +174,22 @@ public class WorldGenerationController : MonoBehaviour
             pos.y / 64f + seed + 1000000 * (int)type
         );
 
-# if !UNITY_EDITOR
-        if (oreStrengthOffsets.TryGetValue(pos, out int value))
-        {
-            return (int)(1_000_000_000 * (strength - 0.9f) + 10_000) - value;
-        }
-        else
-        {
-            return (int)(1_000_000_000 * (strength - 0.9f) + 10_000);
-        }
+#if !UNITY_EDITOR
+        return (int)(500_000_000 * (strength - 0.8f) + 10_000);
 #else
+        return (int)(1_000_000_000 * (strength - 0.5f) + 10_000);
+#endif
+    }
+
+    public static int GetOffsettedOreStrength(Vector3Int pos, OreController.Type type)
+    {
         if (oreStrengthOffsets.TryGetValue(pos, out int value))
         {
-            return (int)(1_000_000_000 * (strength - 0.5f) + 10_000) - value;
+            return GetOreStrength(pos, type) - value;
         }
         else
         {
-            return (int)(1_000_000_000 * (strength - 0.5f) + 10_000);
+            return GetOreStrength(pos, type);
         }
-#endif
     }
 }

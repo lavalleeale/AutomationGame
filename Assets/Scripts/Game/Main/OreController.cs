@@ -12,12 +12,13 @@ public class OreController : TooltipBehaviour
     public bool Active = false;
     public int Strength
     {
-        get { return WorldGenerationController.GetOreStrength(pos: pos, type: type); }
+        get { return WorldGenerationController.GetOffsettedOreStrength(pos: pos, type: type); }
     }
     public Type type;
     public Vector3Int pos;
 
     public SpriteRenderer spriteRenderer;
+    public SpriteRenderer minimapRenderer;
     public BoxCollider2D boxCollider;
 
     public override string tooltipInfo => $"Amount: {Helpers.FormatNumber(Strength)}";
@@ -28,20 +29,24 @@ public class OreController : TooltipBehaviour
         yield return null;
         this.pos = pos;
         spriteRenderer.enabled = true;
+        minimapRenderer.enabled = true;
         boxCollider.enabled = true;
         this.type = type;
         switch (type)
         {
             case Type.coal:
                 spriteRenderer.sprite = coalSprite;
+                minimapRenderer.color = Color.black;
                 InitializeTooltip("Coal", coalSprite);
                 break;
             case Type.copper:
                 spriteRenderer.sprite = copperSprite;
+                minimapRenderer.color = new Color(0.72f, 0.45f, 0.20f);
                 InitializeTooltip("Copper", copperSprite);
                 break;
             case Type.iron:
                 spriteRenderer.sprite = ironSprite;
+                minimapRenderer.color = new Color(0.36f, 0.36f, 0.36f);
                 InitializeTooltip("Iron", ironSprite);
                 break;
         }
@@ -51,6 +56,7 @@ public class OreController : TooltipBehaviour
     public void Deactivate()
     {
         spriteRenderer.enabled = false;
+        minimapRenderer.enabled = false;
         boxCollider.enabled = false;
         Active = false;
     }
