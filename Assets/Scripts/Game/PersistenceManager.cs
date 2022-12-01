@@ -123,7 +123,8 @@ public class PersistenceManager : MonoBehaviour
                             ? null
                             : new SavedItemStack(type: item.item.type, amount: item.amount)
                 )
-                .ToArray()
+                .ToArray(),
+            favorites: new int?[10]
         );
 
         for (int i = 0; i < furnaces.Length; i++)
@@ -216,6 +217,12 @@ public class PersistenceManager : MonoBehaviour
             );
         }
 
+        for (int i = 0; i < 10; i++)
+        {
+            var index = Array.IndexOf(GameObject.Find("GameManager").GetComponent<PlacingController>().buildingPrefabs, PlacingController.FavoritesList[i]);
+            data.favorites[i] = index == -1 ? null : index;
+        }
+
         var saveLocation = Path.Combine(
             Application.persistentDataPath,
             $"{(saveName.text == "" ? DateTime.Now.ToString("yyyyMMddHHmmssffff") : saveName.text)}.dat"
@@ -224,6 +231,7 @@ public class PersistenceManager : MonoBehaviour
         {
             MessagePackSerializer.Serialize(file, data);
         }
+
 
         Debug.Log($"Game data saved to {saveLocation}!");
     }
@@ -357,6 +365,15 @@ public class PersistenceManager : MonoBehaviour
                 amount: itemData.amount
             );
         }
+
+        var placingController = GameObject.Find("GameManager").GetComponent<PlacingController>();
+        for (int i = 0; i < 10; i++)
+        {
+            if (data.favorites[i] != null)
+            {
+                placingController.SetFavorite(i, placingController.buildingPrefabs[(int)i]);
+            }
+        }
     }
 }
 
@@ -384,6 +401,9 @@ public class SaveData
     [Key(6)]
     public SavedItemStack[] inventory;
 
+    [Key(7)]
+    public int?[] favorites;
+
     public SaveData(
         SavedBuilding[] buildings,
         SavedProcessingBuilding[] processingBuildings,
@@ -391,7 +411,8 @@ public class SaveData
         LoadedChunk[] chunks,
         SavedOre[] ores,
         int seed,
-        SavedItemStack[] inventory
+        SavedItemStack[] inventory,
+        int?[] favorites
     )
     {
         this.buildings = buildings;
@@ -401,6 +422,7 @@ public class SaveData
         this.ores = ores;
         this.seed = seed;
         this.inventory = inventory;
+        this.favorites = favorites;
     }
 }
 

@@ -30,7 +30,8 @@ public class LoadTest
             chunks: new LoadedChunk[1] { new LoadedChunk(0, 0) },
             ores: new SavedOre[0],
             seed: 0,
-            inventory: new SavedItemStack[30]
+            inventory: new SavedItemStack[30],
+            favorites: new int?[10]
         );
         PersistenceManager persistenceManager = GameObject
             .Find("Persistence Manager")
@@ -113,7 +114,8 @@ public class LoadTest
             chunks: new LoadedChunk[1] { new LoadedChunk(0, 0) },
             ores: new SavedOre[0],
             seed: 0,
-            inventory: new SavedItemStack[30]
+            inventory: new SavedItemStack[30],
+            favorites: new int?[10]
         );
         PersistenceManager persistenceManager = GameObject
             .Find("Persistence Manager")

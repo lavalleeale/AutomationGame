@@ -9,7 +9,9 @@ public class PlacingController : MonoBehaviour
     public GameObject canvas,
         listPrefab,
         UIBuildingPrefab,
-        UIBuildingSlotPrefab;
+        UIBuildingSlotPrefab,
+        favoritePrefab,
+        favorites;
     public GameObject[] buildingPrefabs;
 
     GameObject buildingList;
@@ -25,6 +27,22 @@ public class PlacingController : MonoBehaviour
     {
         itemsMask = LayerMask.GetMask("items");
         buildingsMask = LayerMask.GetMask("buildings", "conveyors");
+
+        for (int i = 1; i < 11; i++)
+        {
+            var favorite = Instantiate(favoritePrefab).GetComponent<FavoriteController>();
+            favorite.transform.SetParent(favorites.transform, false);
+            favorite.slotIndex = i % 10;
+            favorite.displayText = (i % 10).ToString();
+        }
+    }
+
+    public void SetFavorite(int index, GameObject favorite)
+    {
+        FavoritesList[index] = favorite;
+        var building = Instantiate(UIBuildingPrefab);
+        building.GetComponent<UIBuildingController>().Initialize(favorite, this);
+        building.transform.SetParent(favorites.transform.GetChild(index), false);
     }
 
     void Update()
