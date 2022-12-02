@@ -373,7 +373,10 @@ public class PersistenceManager : MonoBehaviour
         {
             if (data.favorites[i] != null)
             {
-                placingController.SetFavorite(i, placingController.buildingPrefabs[(int)i]);
+                placingController.SetFavorite(
+                    i,
+                    placingController.buildingPrefabs[(int)data.favorites[i]]
+                );
             }
         }
     }

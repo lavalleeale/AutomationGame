@@ -42,7 +42,7 @@ public class PlacingController : MonoBehaviour
         FavoritesList[index] = favorite;
         var building = Instantiate(UIBuildingPrefab);
         building.GetComponent<UIBuildingController>().Initialize(favorite, this);
-        building.transform.SetParent(favorites.transform.GetChild(index), false);
+        building.transform.SetParent(favorites.transform.GetChild((index + 9) % 10), false);
     }
 
     void Update()

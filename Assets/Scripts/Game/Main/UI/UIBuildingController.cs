@@ -35,8 +35,22 @@ public class UIBuildingController : MonoBehaviour, IDragHandler, IBeginDragHandl
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        var newObject = Instantiate(gameObject);
-        newObject.transform.SetParent(transform.parent, false);
+        if (
+            transform.parent.TryGetComponent<FavoriteController>(
+                out FavoriteController favController
+            )
+        )
+        {
+            favController.Child = null;
+        }
+        else
+        {
+            var newObject = Instantiate(gameObject);
+            newObject
+                .GetComponent<UIBuildingController>()
+                .Initialize(buildingPrefab, placingController);
+            newObject.transform.SetParent(transform.parent, false);
+        }
         cg.blocksRaycasts = false;
         previousParent = transform.parent;
         buildingBeingDragged = this;
