@@ -103,9 +103,15 @@ public class PlacingController : MonoBehaviour
                 {
                     Destroy(placing.gameObject);
                 }
-                placing = Instantiate(FavoritesList[i - (int)KeyCode.Alpha0]).GetComponent<BuildingBehaviour>();
+                placing = Instantiate(FavoritesList[i - (int)KeyCode.Alpha0])
+                    .GetComponent<BuildingBehaviour>();
                 placing.transform.rotation = targetPlacementRotation;
-                placing.GetComponent<SpriteRenderer>().color = new Color(r: 0, g: 1, b: 0, a: 0.25f);
+                placing.GetComponent<SpriteRenderer>().color = new Color(
+                    r: 0,
+                    g: 1,
+                    b: 0,
+                    a: 0.25f
+                );
             }
         }
         if (Input.GetKeyDown(KeyCode.B) && GameManager.openGUIs.Count == 0)
@@ -124,10 +130,7 @@ public class PlacingController : MonoBehaviour
             }
             buildingList.transform.SetParent(canvas.transform, false);
         }
-        else if (
-            Input.GetKeyDown(KeyCode.Escape)
-            && GameManager.openGUIs.Contains(GUIType.placing)
-        )
+        else if (Input.GetKeyDown(KeyCode.Escape) && GameManager.openGUIs.Contains(GUIType.placing))
         {
             GameManager.openGUIs.Remove(GUIType.placing);
             Destroy(buildingList);

@@ -249,11 +249,7 @@ public abstract class ProcessingBuildingBehaviour : OutputBuildingBehaviour
 
     private void OnMouseDown()
     {
-        if (
-            Active
-            && GUIController == null
-            && GameManager.OnlyOpen(GUIType.inventory)
-        )
+        if (Active && GUIController == null && GameManager.OnlyOpen(GUIType.inventory))
         {
             GameManager.openGUIs.Add(GUIType.building);
             var buildGUI = Instantiate(buildingGUIPrefab);

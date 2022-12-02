@@ -24,13 +24,13 @@ public class FavoriteController : UIBuildingSlotController, IDropHandler
             }
             else
             {
-                PlacingController.FavoritesList[slotIndex] = value.GetComponent<UIBuildingController>().buildingPrefab;
+                PlacingController.FavoritesList[slotIndex] = value
+                    .GetComponent<UIBuildingController>()
+                    .buildingPrefab;
                 value.transform.SetParent(transform, false);
             }
         }
     }
-
-
 
     public void OnDrop(PointerEventData eventData)
     {
@@ -39,8 +39,9 @@ public class FavoriteController : UIBuildingSlotController, IDropHandler
             Destroy(Child);
         }
         Child = UIBuildingController.buildingBeingDragged.gameObject;
-        UIBuildingController.buildingBeingDragged.GetComponent<RectTransform>().offsetMin = new Vector2(10, 10);
-        UIBuildingController.buildingBeingDragged.GetComponent<RectTransform>().offsetMax = new Vector2(-10, -10);
+        UIBuildingController.buildingBeingDragged.GetComponent<RectTransform>().offsetMin =
+            new Vector2(10, 10);
+        UIBuildingController.buildingBeingDragged.GetComponent<RectTransform>().offsetMax =
+            new Vector2(-10, -10);
     }
 }
-

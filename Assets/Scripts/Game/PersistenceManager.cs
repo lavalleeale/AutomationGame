@@ -219,7 +219,10 @@ public class PersistenceManager : MonoBehaviour
 
         for (int i = 0; i < 10; i++)
         {
-            var index = Array.IndexOf(GameObject.Find("GameManager").GetComponent<PlacingController>().buildingPrefabs, PlacingController.FavoritesList[i]);
+            var index = Array.IndexOf(
+                GameObject.Find("GameManager").GetComponent<PlacingController>().buildingPrefabs,
+                PlacingController.FavoritesList[i]
+            );
             data.favorites[i] = index == -1 ? null : index;
         }
 
@@ -231,7 +234,6 @@ public class PersistenceManager : MonoBehaviour
         {
             MessagePackSerializer.Serialize(file, data);
         }
-
 
         Debug.Log($"Game data saved to {saveLocation}!");
     }

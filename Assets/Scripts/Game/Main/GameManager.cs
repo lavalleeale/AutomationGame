@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
             }
         }
         return false;
-    }   
+    }
 }
 
 public enum GUIType

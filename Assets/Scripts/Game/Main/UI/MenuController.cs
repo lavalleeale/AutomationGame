@@ -35,10 +35,7 @@ public class MenuController : MonoBehaviour
             Time.timeScale = 0;
             mainMenu.SetActive(true);
         }
-        else if (
-            Input.GetKeyDown(KeyCode.Escape)
-            && GameManager.openGUIs.Contains(GUIType.menu)
-        )
+        else if (Input.GetKeyDown(KeyCode.Escape) && GameManager.openGUIs.Contains(GUIType.menu))
         {
             GameManager.openGUIs.Remove(GUIType.menu);
             Time.timeScale = 1;
