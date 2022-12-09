@@ -1,4 +1,4 @@
-name: Actions 😎
+name: Build
 
 on: [push, pull_request]
 
@@ -62,7 +62,7 @@ jobs:
           targetPlatform: ${{ matrix.targetPlatform }}
 
       # Output
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Build
-          path: build
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: Build
+      #     path: build
