@@ -8,6 +8,7 @@ public class AssemblerController : ProcessingBuildingBehaviour
     protected override int MAX_INPUTS { get; set; } = 2;
     protected override string NAME { get; set; } = "Assembler";
     public override Vector3 Size { get; } = new Vector2(2, 2);
+    public override Type SAVE_TYPE { get; set; } = Type.assembler;
 
     void Start()
     {

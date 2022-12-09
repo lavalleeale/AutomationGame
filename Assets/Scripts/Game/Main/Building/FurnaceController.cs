@@ -8,6 +8,7 @@ public class FurnaceController : ProcessingBuildingBehaviour
     protected override int MAX_INPUTS { get; set; } = 1;
     protected override string NAME { get; set; } = "Furnace";
     public override Vector3 Size { get; } = new Vector2(2, 2);
+    public override Type SAVE_TYPE { get; set; } = Type.furnace;
 
     void Start()
     {

@@ -25,7 +25,11 @@ public class Slot : MonoBehaviour
 
     public void OnClick()
     {
-        if (!Child && controller.DragToSlot(UIItem.itemBeingDragged.itemStack, slotType, slotNum))
+        if (
+            !Child
+            && UIItem.itemBeingDragged.itemStack != null
+            && controller.DragToSlot(UIItem.itemBeingDragged.itemStack, slotType, slotNum)
+        )
         {
             Child = UIItem.itemBeingDragged.gameObject;
             UIItem.itemBeingDragged.isBeingDragged = false;

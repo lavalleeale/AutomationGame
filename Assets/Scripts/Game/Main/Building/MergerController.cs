@@ -4,6 +4,7 @@ using System.Collections;
 public class MergerController : BuildingBehaviour
 {
     public override Vector3 Size { get; } = new Vector2(1, 1);
+    public override Type SAVE_TYPE { get; set; } = Type.merger;
 
     Vector3 itemPos;
     ItemStack top,

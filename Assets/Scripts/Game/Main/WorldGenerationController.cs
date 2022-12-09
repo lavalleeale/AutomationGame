@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 public class WorldGenerationController : MonoBehaviour
 {
-    public List<Vector3Int> knownChunks = new();
     public Vector3Int lastPos;
     public OreController[,,] oreControllers = new OreController[9, 9, 1024];
     int[] oreControllersRowIndices = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
@@ -103,31 +102,39 @@ public class WorldGenerationController : MonoBehaviour
 
     public void Initialize(int seed)
     {
-        for (int y = 0; y < 9; y++)
+        // Loop over each row and column of the ore grid.
+        for (int y = 0; y < oreControllers.GetLength(0); y++)
         {
-            for (int x = 0; x < 9; x++)
+            for (int x = 0; x < oreControllers.GetLength(1); x++)
             {
+                // Loop over each ore in the current row and column.
                 for (int i = 0; i < 1024; i++)
                 {
+                    // Instantiate a new ore prefab.
                     var ore = Instantiate(orePrefab);
+
+                    // Set the parent of the ore to the ores object.
                     ore.transform.SetParent(ores.transform);
+
+                    // Store a reference to the ore controller in the oreControllers array.
                     oreControllers[x, y, i] = ore.GetComponent<OreController>();
                 }
             }
         }
+
+        // Set the active property to true and the seed property of the WorldGenerationController.
         this.active = true;
         WorldGenerationController.seed = seed;
-        for (int i = 0; i < knownChunks.Count; i++)
-        {
-            var ground = Instantiate(groundPrefab);
-            ground.transform.position = chunkGrid.CellToWorld(knownChunks[i]);
-        }
 
+        // Loop over each row and column of the chunk grid.
         for (int r = 0; r < 9; r++)
         {
             for (int c = 0; c < 9; c++)
             {
+                // Calculate the position of the current cell in the grid.
                 Vector3Int cellPos = new Vector3Int(x: c - 4, y: r - 4);
+
+                // Generate the chunk at the specified grid position.
                 Generate(gridPos: cellPos, x: c, y: r);
             }
         }
@@ -140,26 +147,48 @@ public class WorldGenerationController : MonoBehaviour
 
     void spawnOre(Vector3Int centeredOn, int x, int y)
     {
+        // Initialize the variable that will keep track of the number of used ores to 0.
         int usedOres = 0;
-        var buildingGridCenteredOn = centeredOn * 32;
-        for (int r = 0; r < 32; r++)
-        {
-            for (int c = 0; c < 32; c++)
-            {
-                var pos = buildingGridCenteredOn;
-                pos.x += c;
-                pos.y += r;
-                for (int i = 0; i < 3; i++)
-                {
-                    var strength = GetOreStrength(pos: pos, type: (OreController.Type)i);
 
+        // Calculate the position of the building grid centered on the specified position.
+        var buildingGridCenteredOn = centeredOn * 32;
+
+        // Loop over each row and column of the grid.
+        for (int row = 0; row < 32; row++)
+        {
+            for (int column = 0; column < 32; column++)
+            {
+                // Calculate the current position in the grid by adding the row and column
+                // offsets to the centered position of the building grid.
+                var pos = buildingGridCenteredOn;
+                pos.x += column;
+                pos.y += row;
+
+                // Loop over each type of ore.
+                for (int oreType = 0; oreType < 3; oreType++)
+                {
+                    // Check the strength of the current ore at the specified position.
+                    var strength = GetOreStrength(pos: pos, type: (OreController.Type)oreType);
+
+                    // If the ore strength is greater than 0, spawn an ore object.
                     if (strength > 0)
                     {
+                        // Get the ore controller from the oreControllers array at the specified indices.
                         var controller = oreControllers[x, y, usedOres];
-                        StartCoroutine(controller.Setup(type: (OreController.Type)i, pos: pos));
+
+                        // Start a coroutine to set up the ore controller with the specified type and position.
+                        StartCoroutine(
+                            controller.Setup(type: (OreController.Type)oreType, pos: pos)
+                        );
+
+                        // Set the position of the ore controller in the game world.
                         controller.transform.position =
                             buildingGrid.CellToWorld(pos) + new Vector3(x: 0.32f, y: 0.32f);
+
+                        // Increment the number of used ores.
                         usedOres++;
+
+                        // Break out of the loop.
                         break;
                     }
                 }

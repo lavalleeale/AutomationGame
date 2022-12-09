@@ -6,13 +6,15 @@
 #pragma warning disable 612
 #pragma warning disable 414
 #pragma warning disable 168
-#pragma warning disable CS1591 // document public APIs
 
+#pragma warning disable SA1200 // Using directives should be placed correctly
 #pragma warning disable SA1312 // Variable names should begin with lower-case letter
 #pragma warning disable SA1649 // File name should match first type name
 
 namespace MessagePack.Resolvers
 {
+    using System;
+
     public class GeneratedResolver : global::MessagePack.IFormatterResolver
     {
         public static readonly global::MessagePack.IFormatterResolver Instance = new GeneratedResolver();
@@ -43,33 +45,31 @@ namespace MessagePack.Resolvers
 
     internal static class GeneratedResolverGetFormatterHelper
     {
-        private static readonly global::System.Collections.Generic.Dictionary<global::System.Type, int> lookup;
+        private static readonly global::System.Collections.Generic.Dictionary<Type, int> lookup;
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(17)
+            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(15)
             {
-                { typeof(global::LoadedChunk[]), 0 },
-                { typeof(global::SavedBuilding[]), 1 },
-                { typeof(global::SavedItemStack[]), 2 },
-                { typeof(global::SavedOre[]), 3 },
-                { typeof(global::SavedProcessingBuilding[]), 4 },
-                { typeof(global::SavedWorldItemStack[]), 5 },
-                { typeof(int?[]), 6 },
+                { typeof(global::SavedBuilding[]), 0 },
+                { typeof(global::SavedItemStack[]), 1 },
+                { typeof(global::SavedOre[]), 2 },
+                { typeof(global::SavedProcessingBuilding[]), 3 },
+                { typeof(global::SavedWorldItemStack[]), 4 },
+                { typeof(int?[]), 5 },
+                { typeof(global::BuildingBehaviour.Type), 6 },
                 { typeof(global::Item.Type), 7 },
-                { typeof(global::SavedBuilding.Type), 8 },
-                { typeof(global::SavedProcessingBuilding.Type), 9 },
-                { typeof(global::LoadedChunk), 10 },
-                { typeof(global::SaveData), 11 },
-                { typeof(global::SavedBuilding), 12 },
-                { typeof(global::SavedItemStack), 13 },
-                { typeof(global::SavedOre), 14 },
-                { typeof(global::SavedProcessingBuilding), 15 },
-                { typeof(global::SavedWorldItemStack), 16 },
+                { typeof(global::LoadedChunk), 8 },
+                { typeof(global::SaveData), 9 },
+                { typeof(global::SavedBuilding), 10 },
+                { typeof(global::SavedItemStack), 11 },
+                { typeof(global::SavedOre), 12 },
+                { typeof(global::SavedProcessingBuilding), 13 },
+                { typeof(global::SavedWorldItemStack), 14 },
             };
         }
 
-        internal static object GetFormatter(global::System.Type t)
+        internal static object GetFormatter(Type t)
         {
             int key;
             if (!lookup.TryGetValue(t, out key))
@@ -79,23 +79,21 @@ namespace MessagePack.Resolvers
 
             switch (key)
             {
-                case 0: return new global::MessagePack.Formatters.ArrayFormatter<global::LoadedChunk>();
-                case 1: return new global::MessagePack.Formatters.ArrayFormatter<global::SavedBuilding>();
-                case 2: return new global::MessagePack.Formatters.ArrayFormatter<global::SavedItemStack>();
-                case 3: return new global::MessagePack.Formatters.ArrayFormatter<global::SavedOre>();
-                case 4: return new global::MessagePack.Formatters.ArrayFormatter<global::SavedProcessingBuilding>();
-                case 5: return new global::MessagePack.Formatters.ArrayFormatter<global::SavedWorldItemStack>();
-                case 6: return new global::MessagePack.Formatters.ArrayFormatter<int?>();
+                case 0: return new global::MessagePack.Formatters.ArrayFormatter<global::SavedBuilding>();
+                case 1: return new global::MessagePack.Formatters.ArrayFormatter<global::SavedItemStack>();
+                case 2: return new global::MessagePack.Formatters.ArrayFormatter<global::SavedOre>();
+                case 3: return new global::MessagePack.Formatters.ArrayFormatter<global::SavedProcessingBuilding>();
+                case 4: return new global::MessagePack.Formatters.ArrayFormatter<global::SavedWorldItemStack>();
+                case 5: return new global::MessagePack.Formatters.ArrayFormatter<int?>();
+                case 6: return new MessagePack.Formatters.BuildingBehaviour_TypeFormatter();
                 case 7: return new MessagePack.Formatters.Item_TypeFormatter();
-                case 8: return new MessagePack.Formatters.SavedBuilding_TypeFormatter();
-                case 9: return new MessagePack.Formatters.SavedProcessingBuilding_TypeFormatter();
-                case 10: return new MessagePack.Formatters.LoadedChunkFormatter();
-                case 11: return new MessagePack.Formatters.SaveDataFormatter();
-                case 12: return new MessagePack.Formatters.SavedBuildingFormatter();
-                case 13: return new MessagePack.Formatters.SavedItemStackFormatter();
-                case 14: return new MessagePack.Formatters.SavedOreFormatter();
-                case 15: return new MessagePack.Formatters.SavedProcessingBuildingFormatter();
-                case 16: return new MessagePack.Formatters.SavedWorldItemStackFormatter();
+                case 8: return new MessagePack.Formatters.LoadedChunkFormatter();
+                case 9: return new MessagePack.Formatters.SaveDataFormatter();
+                case 10: return new MessagePack.Formatters.SavedBuildingFormatter();
+                case 11: return new MessagePack.Formatters.SavedItemStackFormatter();
+                case 12: return new MessagePack.Formatters.SavedOreFormatter();
+                case 13: return new MessagePack.Formatters.SavedProcessingBuildingFormatter();
+                case 14: return new MessagePack.Formatters.SavedWorldItemStackFormatter();
                 default: return null;
             }
         }
@@ -108,6 +106,7 @@ namespace MessagePack.Resolvers
 #pragma warning restore 612
 
 #pragma warning restore SA1312 // Variable names should begin with lower-case letter
+#pragma warning restore SA1200 // Using directives should be placed correctly
 #pragma warning restore SA1649 // File name should match first type name
 
 
@@ -119,50 +118,40 @@ namespace MessagePack.Resolvers
 #pragma warning disable 612
 #pragma warning disable 414
 #pragma warning disable 168
-#pragma warning disable CS1591 // document public APIs
 
+#pragma warning disable SA1200 // Using directives should be placed correctly
 #pragma warning disable SA1403 // File may only contain a single namespace
 #pragma warning disable SA1649 // File name should match first type name
 
 namespace MessagePack.Formatters
 {
+    using System;
+    using System.Buffers;
+    using MessagePack;
+
+    public sealed class BuildingBehaviour_TypeFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::BuildingBehaviour.Type>
+    {
+        public void Serialize(ref MessagePackWriter writer, global::BuildingBehaviour.Type value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            writer.Write((Byte)value);
+        }
+
+        public global::BuildingBehaviour.Type Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            return (global::BuildingBehaviour.Type)reader.ReadByte();
+        }
+    }
 
     public sealed class Item_TypeFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Item.Type>
     {
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Item.Type value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, global::Item.Type value, global::MessagePack.MessagePackSerializerOptions options)
         {
-            writer.Write((global::System.Byte)value);
+            writer.Write((Byte)value);
         }
 
-        public global::Item.Type Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Item.Type Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             return (global::Item.Type)reader.ReadByte();
-        }
-    }
-
-    public sealed class SavedBuilding_TypeFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::SavedBuilding.Type>
-    {
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::SavedBuilding.Type value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            writer.Write((global::System.Byte)value);
-        }
-
-        public global::SavedBuilding.Type Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            return (global::SavedBuilding.Type)reader.ReadByte();
-        }
-    }
-
-    public sealed class SavedProcessingBuilding_TypeFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::SavedProcessingBuilding.Type>
-    {
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::SavedProcessingBuilding.Type value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            writer.Write((global::System.Byte)value);
-        }
-
-        public global::SavedProcessingBuilding.Type Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            return (global::SavedProcessingBuilding.Type)reader.ReadByte();
         }
     }
 }
@@ -172,6 +161,7 @@ namespace MessagePack.Formatters
 #pragma warning restore 618
 #pragma warning restore 612
 
+#pragma warning restore SA1200 // Using directives should be placed correctly
 #pragma warning restore SA1403 // File may only contain a single namespace
 #pragma warning restore SA1649 // File name should match first type name
 
@@ -185,9 +175,9 @@ namespace MessagePack.Formatters
 #pragma warning disable 612
 #pragma warning disable 414
 #pragma warning disable 168
-#pragma warning disable CS1591 // document public APIs
 
 #pragma warning disable SA1129 // Do not use default value type constructor
+#pragma warning disable SA1200 // Using directives should be placed correctly
 #pragma warning disable SA1309 // Field names should not begin with underscore
 #pragma warning disable SA1312 // Variable names should begin with lower-case letter
 #pragma warning disable SA1403 // File may only contain a single namespace
@@ -195,10 +185,33 @@ namespace MessagePack.Formatters
 
 namespace MessagePack.Formatters
 {
+    using System;
+    using System.Buffers;
+    using MessagePack;
+
     public sealed class LoadedChunkFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::LoadedChunk>
     {
 
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::LoadedChunk value, global::MessagePack.MessagePackSerializerOptions options)
+
+        private readonly global::MessagePack.Internal.AutomataDictionary ____keyMapping;
+        private readonly byte[][] ____stringByteKeys;
+
+        public LoadedChunkFormatter()
+        {
+            this.____keyMapping = new global::MessagePack.Internal.AutomataDictionary()
+            {
+                { "x", 0 },
+                { "y", 1 },
+            };
+
+            this.____stringByteKeys = new byte[][]
+            {
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("x"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("y"),
+            };
+        }
+
+        public void Serialize(ref MessagePackWriter writer, global::LoadedChunk value, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (value == null)
             {
@@ -206,12 +219,15 @@ namespace MessagePack.Formatters
                 return;
             }
 
-            writer.WriteArrayHeader(2);
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteMapHeader(2);
+            writer.WriteRaw(this.____stringByteKeys[0]);
             writer.Write(value.x);
+            writer.WriteRaw(this.____stringByteKeys[1]);
             writer.Write(value.y);
         }
 
-        public global::LoadedChunk Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::LoadedChunk Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -219,13 +235,22 @@ namespace MessagePack.Formatters
             }
 
             options.Security.DepthStep(ref reader);
-            var length = reader.ReadArrayHeader();
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadMapHeader();
             var __x__ = default(int);
             var __y__ = default(int);
 
             for (int i = 0; i < length; i++)
             {
-                switch (i)
+                ReadOnlySpan<byte> stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                int key;
+                if (!this.____keyMapping.TryGetValue(stringKey, out key))
+                {
+                    reader.Skip();
+                    continue;
+                }
+
+                switch (key)
                 {
                     case 0:
                         __x__ = reader.ReadInt32();
@@ -240,6 +265,8 @@ namespace MessagePack.Formatters
             }
 
             var ____result = new global::LoadedChunk(__x__, __y__);
+            ____result.x = __x__;
+            ____result.y = __y__;
             reader.Depth--;
             return ____result;
         }
@@ -248,7 +275,36 @@ namespace MessagePack.Formatters
     public sealed class SaveDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::SaveData>
     {
 
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::SaveData value, global::MessagePack.MessagePackSerializerOptions options)
+
+        private readonly global::MessagePack.Internal.AutomataDictionary ____keyMapping;
+        private readonly byte[][] ____stringByteKeys;
+
+        public SaveDataFormatter()
+        {
+            this.____keyMapping = new global::MessagePack.Internal.AutomataDictionary()
+            {
+                { "buildings", 0 },
+                { "processingBuildings", 1 },
+                { "items", 2 },
+                { "ores", 3 },
+                { "seed", 4 },
+                { "inventory", 5 },
+                { "favorites", 6 },
+            };
+
+            this.____stringByteKeys = new byte[][]
+            {
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("buildings"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("processingBuildings"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("items"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("ores"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("seed"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("inventory"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("favorites"),
+            };
+        }
+
+        public void Serialize(ref MessagePackWriter writer, global::SaveData value, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (value == null)
             {
@@ -256,19 +312,25 @@ namespace MessagePack.Formatters
                 return;
             }
 
-            global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(8);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::SavedBuilding[]>(formatterResolver).Serialize(ref writer, value.buildings, options);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::SavedProcessingBuilding[]>(formatterResolver).Serialize(ref writer, value.processingBuildings, options);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::SavedWorldItemStack[]>(formatterResolver).Serialize(ref writer, value.items, options);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::LoadedChunk[]>(formatterResolver).Serialize(ref writer, value.chunks, options);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::SavedOre[]>(formatterResolver).Serialize(ref writer, value.ores, options);
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteMapHeader(7);
+            writer.WriteRaw(this.____stringByteKeys[0]);
+            formatterResolver.GetFormatterWithVerify<global::SavedBuilding[]>().Serialize(ref writer, value.buildings, options);
+            writer.WriteRaw(this.____stringByteKeys[1]);
+            formatterResolver.GetFormatterWithVerify<global::SavedProcessingBuilding[]>().Serialize(ref writer, value.processingBuildings, options);
+            writer.WriteRaw(this.____stringByteKeys[2]);
+            formatterResolver.GetFormatterWithVerify<global::SavedWorldItemStack[]>().Serialize(ref writer, value.items, options);
+            writer.WriteRaw(this.____stringByteKeys[3]);
+            formatterResolver.GetFormatterWithVerify<global::SavedOre[]>().Serialize(ref writer, value.ores, options);
+            writer.WriteRaw(this.____stringByteKeys[4]);
             writer.Write(value.seed);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::SavedItemStack[]>(formatterResolver).Serialize(ref writer, value.inventory, options);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<int?[]>(formatterResolver).Serialize(ref writer, value.favorites, options);
+            writer.WriteRaw(this.____stringByteKeys[5]);
+            formatterResolver.GetFormatterWithVerify<global::SavedItemStack[]>().Serialize(ref writer, value.inventory, options);
+            writer.WriteRaw(this.____stringByteKeys[6]);
+            formatterResolver.GetFormatterWithVerify<int?[]>().Serialize(ref writer, value.favorites, options);
         }
 
-        public global::SaveData Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::SaveData Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -276,12 +338,11 @@ namespace MessagePack.Formatters
             }
 
             options.Security.DepthStep(ref reader);
-            global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadArrayHeader();
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadMapHeader();
             var __buildings__ = default(global::SavedBuilding[]);
             var __processingBuildings__ = default(global::SavedProcessingBuilding[]);
             var __items__ = default(global::SavedWorldItemStack[]);
-            var __chunks__ = default(global::LoadedChunk[]);
             var __ores__ = default(global::SavedOre[]);
             var __seed__ = default(int);
             var __inventory__ = default(global::SavedItemStack[]);
@@ -289,31 +350,36 @@ namespace MessagePack.Formatters
 
             for (int i = 0; i < length; i++)
             {
-                switch (i)
+                ReadOnlySpan<byte> stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                int key;
+                if (!this.____keyMapping.TryGetValue(stringKey, out key))
+                {
+                    reader.Skip();
+                    continue;
+                }
+
+                switch (key)
                 {
                     case 0:
-                        __buildings__ = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::SavedBuilding[]>(formatterResolver).Deserialize(ref reader, options);
+                        __buildings__ = formatterResolver.GetFormatterWithVerify<global::SavedBuilding[]>().Deserialize(ref reader, options);
                         break;
                     case 1:
-                        __processingBuildings__ = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::SavedProcessingBuilding[]>(formatterResolver).Deserialize(ref reader, options);
+                        __processingBuildings__ = formatterResolver.GetFormatterWithVerify<global::SavedProcessingBuilding[]>().Deserialize(ref reader, options);
                         break;
                     case 2:
-                        __items__ = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::SavedWorldItemStack[]>(formatterResolver).Deserialize(ref reader, options);
+                        __items__ = formatterResolver.GetFormatterWithVerify<global::SavedWorldItemStack[]>().Deserialize(ref reader, options);
                         break;
                     case 3:
-                        __chunks__ = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::LoadedChunk[]>(formatterResolver).Deserialize(ref reader, options);
+                        __ores__ = formatterResolver.GetFormatterWithVerify<global::SavedOre[]>().Deserialize(ref reader, options);
                         break;
                     case 4:
-                        __ores__ = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::SavedOre[]>(formatterResolver).Deserialize(ref reader, options);
-                        break;
-                    case 5:
                         __seed__ = reader.ReadInt32();
                         break;
-                    case 6:
-                        __inventory__ = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::SavedItemStack[]>(formatterResolver).Deserialize(ref reader, options);
+                    case 5:
+                        __inventory__ = formatterResolver.GetFormatterWithVerify<global::SavedItemStack[]>().Deserialize(ref reader, options);
                         break;
-                    case 7:
-                        __favorites__ = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<int?[]>(formatterResolver).Deserialize(ref reader, options);
+                    case 6:
+                        __favorites__ = formatterResolver.GetFormatterWithVerify<int?[]>().Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();
@@ -321,7 +387,14 @@ namespace MessagePack.Formatters
                 }
             }
 
-            var ____result = new global::SaveData(__buildings__, __processingBuildings__, __items__, __chunks__, __ores__, __seed__, __inventory__, __favorites__);
+            var ____result = new global::SaveData(__buildings__, __processingBuildings__, __items__, __ores__, __seed__, __inventory__, __favorites__);
+            ____result.buildings = __buildings__;
+            ____result.processingBuildings = __processingBuildings__;
+            ____result.items = __items__;
+            ____result.ores = __ores__;
+            ____result.seed = __seed__;
+            ____result.inventory = __inventory__;
+            ____result.favorites = __favorites__;
             reader.Depth--;
             return ____result;
         }
@@ -330,7 +403,30 @@ namespace MessagePack.Formatters
     public sealed class SavedBuildingFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::SavedBuilding>
     {
 
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::SavedBuilding value, global::MessagePack.MessagePackSerializerOptions options)
+
+        private readonly global::MessagePack.Internal.AutomataDictionary ____keyMapping;
+        private readonly byte[][] ____stringByteKeys;
+
+        public SavedBuildingFormatter()
+        {
+            this.____keyMapping = new global::MessagePack.Internal.AutomataDictionary()
+            {
+                { "type", 0 },
+                { "rotation", 1 },
+                { "xPos", 2 },
+                { "yPos", 3 },
+            };
+
+            this.____stringByteKeys = new byte[][]
+            {
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("type"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("rotation"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("xPos"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("yPos"),
+            };
+        }
+
+        public void Serialize(ref MessagePackWriter writer, global::SavedBuilding value, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (value == null)
             {
@@ -338,15 +434,19 @@ namespace MessagePack.Formatters
                 return;
             }
 
-            global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(4);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::SavedBuilding.Type>(formatterResolver).Serialize(ref writer, value.type, options);
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteMapHeader(4);
+            writer.WriteRaw(this.____stringByteKeys[0]);
+            formatterResolver.GetFormatterWithVerify<global::BuildingBehaviour.Type>().Serialize(ref writer, value.type, options);
+            writer.WriteRaw(this.____stringByteKeys[1]);
             writer.Write(value.rotation);
+            writer.WriteRaw(this.____stringByteKeys[2]);
             writer.Write(value.xPos);
+            writer.WriteRaw(this.____stringByteKeys[3]);
             writer.Write(value.yPos);
         }
 
-        public global::SavedBuilding Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::SavedBuilding Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -354,19 +454,27 @@ namespace MessagePack.Formatters
             }
 
             options.Security.DepthStep(ref reader);
-            global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadArrayHeader();
-            var __type__ = default(global::SavedBuilding.Type);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadMapHeader();
+            var __type__ = default(global::BuildingBehaviour.Type);
             var __rotation__ = default(byte);
             var __xPos__ = default(int);
             var __yPos__ = default(int);
 
             for (int i = 0; i < length; i++)
             {
-                switch (i)
+                ReadOnlySpan<byte> stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                int key;
+                if (!this.____keyMapping.TryGetValue(stringKey, out key))
+                {
+                    reader.Skip();
+                    continue;
+                }
+
+                switch (key)
                 {
                     case 0:
-                        __type__ = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::SavedBuilding.Type>(formatterResolver).Deserialize(ref reader, options);
+                        __type__ = formatterResolver.GetFormatterWithVerify<global::BuildingBehaviour.Type>().Deserialize(ref reader, options);
                         break;
                     case 1:
                         __rotation__ = reader.ReadByte();
@@ -384,6 +492,10 @@ namespace MessagePack.Formatters
             }
 
             var ____result = new global::SavedBuilding(__type__, __rotation__, __xPos__, __yPos__);
+            ____result.type = __type__;
+            ____result.rotation = __rotation__;
+            ____result.xPos = __xPos__;
+            ____result.yPos = __yPos__;
             reader.Depth--;
             return ____result;
         }
@@ -392,7 +504,26 @@ namespace MessagePack.Formatters
     public sealed class SavedItemStackFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::SavedItemStack>
     {
 
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::SavedItemStack value, global::MessagePack.MessagePackSerializerOptions options)
+
+        private readonly global::MessagePack.Internal.AutomataDictionary ____keyMapping;
+        private readonly byte[][] ____stringByteKeys;
+
+        public SavedItemStackFormatter()
+        {
+            this.____keyMapping = new global::MessagePack.Internal.AutomataDictionary()
+            {
+                { "amount", 0 },
+                { "type", 1 },
+            };
+
+            this.____stringByteKeys = new byte[][]
+            {
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("amount"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("type"),
+            };
+        }
+
+        public void Serialize(ref MessagePackWriter writer, global::SavedItemStack value, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (value == null)
             {
@@ -400,13 +531,15 @@ namespace MessagePack.Formatters
                 return;
             }
 
-            global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(2);
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteMapHeader(2);
+            writer.WriteRaw(this.____stringByteKeys[0]);
             writer.Write(value.amount);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Item.Type>(formatterResolver).Serialize(ref writer, value.type, options);
+            writer.WriteRaw(this.____stringByteKeys[1]);
+            formatterResolver.GetFormatterWithVerify<global::Item.Type>().Serialize(ref writer, value.type, options);
         }
 
-        public global::SavedItemStack Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::SavedItemStack Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -414,20 +547,28 @@ namespace MessagePack.Formatters
             }
 
             options.Security.DepthStep(ref reader);
-            global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadArrayHeader();
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadMapHeader();
             var __amount__ = default(byte);
             var __type__ = default(global::Item.Type);
 
             for (int i = 0; i < length; i++)
             {
-                switch (i)
+                ReadOnlySpan<byte> stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                int key;
+                if (!this.____keyMapping.TryGetValue(stringKey, out key))
+                {
+                    reader.Skip();
+                    continue;
+                }
+
+                switch (key)
                 {
                     case 0:
                         __amount__ = reader.ReadByte();
                         break;
                     case 1:
-                        __type__ = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Item.Type>(formatterResolver).Deserialize(ref reader, options);
+                        __type__ = formatterResolver.GetFormatterWithVerify<global::Item.Type>().Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();
@@ -436,6 +577,8 @@ namespace MessagePack.Formatters
             }
 
             var ____result = new global::SavedItemStack(__amount__, __type__);
+            ____result.amount = __amount__;
+            ____result.type = __type__;
             reader.Depth--;
             return ____result;
         }
@@ -444,7 +587,28 @@ namespace MessagePack.Formatters
     public sealed class SavedOreFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::SavedOre>
     {
 
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::SavedOre value, global::MessagePack.MessagePackSerializerOptions options)
+
+        private readonly global::MessagePack.Internal.AutomataDictionary ____keyMapping;
+        private readonly byte[][] ____stringByteKeys;
+
+        public SavedOreFormatter()
+        {
+            this.____keyMapping = new global::MessagePack.Internal.AutomataDictionary()
+            {
+                { "x", 0 },
+                { "y", 1 },
+                { "offset", 2 },
+            };
+
+            this.____stringByteKeys = new byte[][]
+            {
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("x"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("y"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("offset"),
+            };
+        }
+
+        public void Serialize(ref MessagePackWriter writer, global::SavedOre value, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (value == null)
             {
@@ -452,13 +616,17 @@ namespace MessagePack.Formatters
                 return;
             }
 
-            writer.WriteArrayHeader(3);
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteMapHeader(3);
+            writer.WriteRaw(this.____stringByteKeys[0]);
             writer.Write(value.x);
+            writer.WriteRaw(this.____stringByteKeys[1]);
             writer.Write(value.y);
+            writer.WriteRaw(this.____stringByteKeys[2]);
             writer.Write(value.offset);
         }
 
-        public global::SavedOre Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::SavedOre Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -466,14 +634,23 @@ namespace MessagePack.Formatters
             }
 
             options.Security.DepthStep(ref reader);
-            var length = reader.ReadArrayHeader();
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadMapHeader();
             var __x__ = default(int);
             var __y__ = default(int);
             var __offset__ = default(int);
 
             for (int i = 0; i < length; i++)
             {
-                switch (i)
+                ReadOnlySpan<byte> stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                int key;
+                if (!this.____keyMapping.TryGetValue(stringKey, out key))
+                {
+                    reader.Skip();
+                    continue;
+                }
+
+                switch (key)
                 {
                     case 0:
                         __x__ = reader.ReadInt32();
@@ -491,6 +668,9 @@ namespace MessagePack.Formatters
             }
 
             var ____result = new global::SavedOre(__x__, __y__, __offset__);
+            ____result.x = __x__;
+            ____result.y = __y__;
+            ____result.offset = __offset__;
             reader.Depth--;
             return ____result;
         }
@@ -499,7 +679,36 @@ namespace MessagePack.Formatters
     public sealed class SavedProcessingBuildingFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::SavedProcessingBuilding>
     {
 
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::SavedProcessingBuilding value, global::MessagePack.MessagePackSerializerOptions options)
+
+        private readonly global::MessagePack.Internal.AutomataDictionary ____keyMapping;
+        private readonly byte[][] ____stringByteKeys;
+
+        public SavedProcessingBuildingFormatter()
+        {
+            this.____keyMapping = new global::MessagePack.Internal.AutomataDictionary()
+            {
+                { "type", 0 },
+                { "rotation", 1 },
+                { "xPos", 2 },
+                { "yPos", 3 },
+                { "inputs", 4 },
+                { "output", 5 },
+                { "currentRecipe", 6 },
+            };
+
+            this.____stringByteKeys = new byte[][]
+            {
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("type"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("rotation"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("xPos"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("yPos"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("inputs"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("output"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("currentRecipe"),
+            };
+        }
+
+        public void Serialize(ref MessagePackWriter writer, global::SavedProcessingBuilding value, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (value == null)
             {
@@ -507,18 +716,25 @@ namespace MessagePack.Formatters
                 return;
             }
 
-            global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(7);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::SavedProcessingBuilding.Type>(formatterResolver).Serialize(ref writer, value.type, options);
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteMapHeader(7);
+            writer.WriteRaw(this.____stringByteKeys[0]);
+            formatterResolver.GetFormatterWithVerify<global::BuildingBehaviour.Type>().Serialize(ref writer, value.type, options);
+            writer.WriteRaw(this.____stringByteKeys[1]);
             writer.Write(value.rotation);
+            writer.WriteRaw(this.____stringByteKeys[2]);
             writer.Write(value.xPos);
+            writer.WriteRaw(this.____stringByteKeys[3]);
             writer.Write(value.yPos);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::SavedItemStack[]>(formatterResolver).Serialize(ref writer, value.inputs, options);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::SavedItemStack>(formatterResolver).Serialize(ref writer, value.output, options);
+            writer.WriteRaw(this.____stringByteKeys[4]);
+            formatterResolver.GetFormatterWithVerify<global::SavedItemStack[]>().Serialize(ref writer, value.inputs, options);
+            writer.WriteRaw(this.____stringByteKeys[5]);
+            formatterResolver.GetFormatterWithVerify<global::SavedItemStack>().Serialize(ref writer, value.output, options);
+            writer.WriteRaw(this.____stringByteKeys[6]);
             writer.Write(value.currentRecipe);
         }
 
-        public global::SavedProcessingBuilding Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::SavedProcessingBuilding Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -526,9 +742,9 @@ namespace MessagePack.Formatters
             }
 
             options.Security.DepthStep(ref reader);
-            global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadArrayHeader();
-            var __type__ = default(global::SavedProcessingBuilding.Type);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadMapHeader();
+            var __type__ = default(global::BuildingBehaviour.Type);
             var __rotation__ = default(byte);
             var __xPos__ = default(int);
             var __yPos__ = default(int);
@@ -538,10 +754,18 @@ namespace MessagePack.Formatters
 
             for (int i = 0; i < length; i++)
             {
-                switch (i)
+                ReadOnlySpan<byte> stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                int key;
+                if (!this.____keyMapping.TryGetValue(stringKey, out key))
+                {
+                    reader.Skip();
+                    continue;
+                }
+
+                switch (key)
                 {
                     case 0:
-                        __type__ = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::SavedProcessingBuilding.Type>(formatterResolver).Deserialize(ref reader, options);
+                        __type__ = formatterResolver.GetFormatterWithVerify<global::BuildingBehaviour.Type>().Deserialize(ref reader, options);
                         break;
                     case 1:
                         __rotation__ = reader.ReadByte();
@@ -553,10 +777,10 @@ namespace MessagePack.Formatters
                         __yPos__ = reader.ReadInt32();
                         break;
                     case 4:
-                        __inputs__ = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::SavedItemStack[]>(formatterResolver).Deserialize(ref reader, options);
+                        __inputs__ = formatterResolver.GetFormatterWithVerify<global::SavedItemStack[]>().Deserialize(ref reader, options);
                         break;
                     case 5:
-                        __output__ = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::SavedItemStack>(formatterResolver).Deserialize(ref reader, options);
+                        __output__ = formatterResolver.GetFormatterWithVerify<global::SavedItemStack>().Deserialize(ref reader, options);
                         break;
                     case 6:
                         __currentRecipe__ = reader.ReadInt32();
@@ -568,6 +792,13 @@ namespace MessagePack.Formatters
             }
 
             var ____result = new global::SavedProcessingBuilding(__type__, __rotation__, __xPos__, __yPos__, __inputs__, __output__, __currentRecipe__);
+            ____result.type = __type__;
+            ____result.rotation = __rotation__;
+            ____result.xPos = __xPos__;
+            ____result.yPos = __yPos__;
+            ____result.inputs = __inputs__;
+            ____result.output = __output__;
+            ____result.currentRecipe = __currentRecipe__;
             reader.Depth--;
             return ____result;
         }
@@ -576,7 +807,30 @@ namespace MessagePack.Formatters
     public sealed class SavedWorldItemStackFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::SavedWorldItemStack>
     {
 
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::SavedWorldItemStack value, global::MessagePack.MessagePackSerializerOptions options)
+
+        private readonly global::MessagePack.Internal.AutomataDictionary ____keyMapping;
+        private readonly byte[][] ____stringByteKeys;
+
+        public SavedWorldItemStackFormatter()
+        {
+            this.____keyMapping = new global::MessagePack.Internal.AutomataDictionary()
+            {
+                { "amount", 0 },
+                { "type", 1 },
+                { "xPos", 2 },
+                { "yPos", 3 },
+            };
+
+            this.____stringByteKeys = new byte[][]
+            {
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("amount"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("type"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("xPos"),
+                global::MessagePack.Internal.CodeGenHelpers.GetEncodedStringBytes("yPos"),
+            };
+        }
+
+        public void Serialize(ref MessagePackWriter writer, global::SavedWorldItemStack value, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (value == null)
             {
@@ -584,15 +838,19 @@ namespace MessagePack.Formatters
                 return;
             }
 
-            global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(4);
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteMapHeader(4);
+            writer.WriteRaw(this.____stringByteKeys[0]);
             writer.Write(value.amount);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Item.Type>(formatterResolver).Serialize(ref writer, value.type, options);
+            writer.WriteRaw(this.____stringByteKeys[1]);
+            formatterResolver.GetFormatterWithVerify<global::Item.Type>().Serialize(ref writer, value.type, options);
+            writer.WriteRaw(this.____stringByteKeys[2]);
             writer.Write(value.xPos);
+            writer.WriteRaw(this.____stringByteKeys[3]);
             writer.Write(value.yPos);
         }
 
-        public global::SavedWorldItemStack Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::SavedWorldItemStack Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -600,8 +858,8 @@ namespace MessagePack.Formatters
             }
 
             options.Security.DepthStep(ref reader);
-            global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadArrayHeader();
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadMapHeader();
             var __amount__ = default(byte);
             var __type__ = default(global::Item.Type);
             var __xPos__ = default(int);
@@ -609,13 +867,21 @@ namespace MessagePack.Formatters
 
             for (int i = 0; i < length; i++)
             {
-                switch (i)
+                ReadOnlySpan<byte> stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                int key;
+                if (!this.____keyMapping.TryGetValue(stringKey, out key))
+                {
+                    reader.Skip();
+                    continue;
+                }
+
+                switch (key)
                 {
                     case 0:
                         __amount__ = reader.ReadByte();
                         break;
                     case 1:
-                        __type__ = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Item.Type>(formatterResolver).Deserialize(ref reader, options);
+                        __type__ = formatterResolver.GetFormatterWithVerify<global::Item.Type>().Deserialize(ref reader, options);
                         break;
                     case 2:
                         __xPos__ = reader.ReadInt32();
@@ -630,11 +896,14 @@ namespace MessagePack.Formatters
             }
 
             var ____result = new global::SavedWorldItemStack(__amount__, __type__, __xPos__, __yPos__);
+            ____result.amount = __amount__;
+            ____result.type = __type__;
+            ____result.xPos = __xPos__;
+            ____result.yPos = __yPos__;
             reader.Depth--;
             return ____result;
         }
     }
-
 }
 
 #pragma warning restore 168
@@ -643,6 +912,7 @@ namespace MessagePack.Formatters
 #pragma warning restore 612
 
 #pragma warning restore SA1129 // Do not use default value type constructor
+#pragma warning restore SA1200 // Using directives should be placed correctly
 #pragma warning restore SA1309 // Field names should not begin with underscore
 #pragma warning restore SA1312 // Variable names should begin with lower-case letter
 #pragma warning restore SA1403 // File may only contain a single namespace

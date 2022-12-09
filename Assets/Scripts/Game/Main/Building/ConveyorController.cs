@@ -6,6 +6,7 @@ public class ConveyorController : BuildingBehaviour
 {
     public Vector3 pushDir;
     public override Vector3 Size { get; } = new Vector2(1, 1);
+    public override Type SAVE_TYPE { get; set; } = Type.conveyor;
 
     public override void Activate()
     {

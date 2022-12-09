@@ -8,6 +8,7 @@ using System;
 public class MinerController : OutputBuildingBehaviour
 {
     public override Vector3 Size { get; } = new Vector2(1, 1);
+    public override Type SAVE_TYPE { get; set; } = Type.miner;
     List<OreData> oreData = new();
     float generationSpeed = 0.5f;
     float nextGeneration = 0;

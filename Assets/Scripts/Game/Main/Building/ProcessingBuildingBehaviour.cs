@@ -220,6 +220,8 @@ public abstract class ProcessingBuildingBehaviour : OutputBuildingBehaviour
                     processingUntil = Time.time + currentRecipe.processingTime;
 
                     SubtractProcessing();
+
+                    AddOutput();
                 }
             }
             else
