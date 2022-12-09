@@ -69,6 +69,7 @@ public abstract class ProcessingBuildingBehaviour : OutputBuildingBehaviour
                     }
                 }
             }
+            // Else find first empty slot in processing and if input in currentRecipe then add to processing
             var firstNull = Processing.IndexOf(null);
             if (firstNull != -1)
             {
@@ -132,6 +133,73 @@ public abstract class ProcessingBuildingBehaviour : OutputBuildingBehaviour
         }
     }
 
+    private void UpdateProcessingTime()
+    {
+        GUIController.UpdateProgress(
+            Mathf.Clamp(
+                (currentRecipe.processingTime - (processingUntil - Time.time))
+                    / currentRecipe.processingTime,
+                0,
+                1
+            )
+        );
+    }
+
+    private bool HasRequiredInputs()
+    {
+        foreach (var input in currentRecipe.inputs)
+        {
+            if (
+                Processing.FirstOrDefault(
+                    item => item?.item.type == input.type && item.amount > input.amount
+                ) == null
+            )
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void SubtractProcessing()
+    {
+        for (int i = 0; i < currentRecipe.inputs.Length; i++)
+        {
+            Processing[i] = new ItemStack(
+                item: Processing[i].item,
+                amount: (byte)(Processing[i].amount - currentRecipe.inputs[i].amount)
+            );
+        }
+    }
+
+    private void AddOutput()
+    {
+        if (Output == null)
+        {
+            Output = new ItemStack(
+                item: currentRecipe.output.type.GetItem(),
+                amount: currentRecipe.output.amount
+            );
+        }
+        else
+        {
+            Output = new ItemStack(
+                item: Output.item,
+                amount: (byte)(Output.amount + currentRecipe.output.amount)
+            );
+        }
+    }
+
+    private bool CanOutput()
+    {
+        // If output occupied but different item or would go over limit
+        return Output == null
+            || (
+                Output.item.type == currentRecipe.output.type
+                && Output.amount + currentRecipe.output.amount <= ItemStack.MAX_ITEMS
+            );
+    }
+
     private void Update()
     {
         if (Active)
@@ -145,63 +213,13 @@ public abstract class ProcessingBuildingBehaviour : OutputBuildingBehaviour
             {
                 if (GUIController != null)
                 {
-                    GUIController.UpdateProgress(
-                        Mathf.Clamp(
-                            (currentRecipe.processingTime - (processingUntil - Time.time))
-                                / currentRecipe.processingTime,
-                            0,
-                            1
-                        )
-                    );
+                    UpdateProcessingTime();
                 }
-                foreach (var input in currentRecipe.inputs)
+                if (HasRequiredInputs() && CanOutput() && Time.time > processingUntil)
                 {
-                    if (
-                        Processing.FirstOrDefault(
-                            item => item?.item.type == input.type && item.amount > input.amount
-                        ) == null
-                    )
-                    {
-                        return;
-                    }
-                }
-                if (Time.time > processingUntil)
-                {
-                    // If output occupied but different item or would go over limit
-                    if (
-                        Output != null
-                        && (
-                            Output.item.type != currentRecipe.output.type
-                            || Output.amount + currentRecipe.output.amount > ItemStack.MAX_ITEMS
-                        )
-                    )
-                    {
-                        return;
-                    }
-
-                    if (Output == null)
-                    {
-                        Output = new ItemStack(
-                            item: currentRecipe.output.type.GetItem(),
-                            amount: currentRecipe.output.amount
-                        );
-                    }
-                    else
-                    {
-                        Output = new ItemStack(
-                            item: Output.item,
-                            amount: (byte)(Output.amount + currentRecipe.output.amount)
-                        );
-                    }
                     processingUntil = Time.time + currentRecipe.processingTime;
 
-                    for (int i = 0; i < currentRecipe.inputs.Length; i++)
-                    {
-                        Processing[i] = new ItemStack(
-                            item: Processing[i].item,
-                            amount: (byte)(Processing[i].amount - currentRecipe.inputs[i].amount)
-                        );
-                    }
+                    SubtractProcessing();
                 }
             }
             else

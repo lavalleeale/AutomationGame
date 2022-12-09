@@ -44,6 +44,7 @@ public class MinerController : OutputBuildingBehaviour
     {
         var grid = GameObject.Find("Building Grid").GetComponent<Grid>();
         var pos = grid.WorldToCell(transform.position);
+        // Set to 0 if nonexistent
         WorldGenerationController.oreStrengthOffsets[pos] =
             WorldGenerationController.oreStrengthOffsets.GetValueOrDefault(pos);
         foreach (OreController.Type oreType in Enum.GetValues(typeof(OreController.Type)))
