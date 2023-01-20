@@ -2,7 +2,7 @@
 
 ## Preview
 
-![Preview](https://github.com/lavalleeale/AutomationGame/blob/main/preview.png?raw=true)
+<img src="https://github.com/lavalleeale/AutomationGame/blob/main/preview.png?raw=true" width="200" />
 
 ## What is this?
 
